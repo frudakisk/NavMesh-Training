@@ -5,43 +5,72 @@ using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
-    bool needSetDestination;
-    Vector3 destination;
+    private Vector3 destination;
+    private float lookRadius = 7.0f;
 
     public float walkRange = 13.0f;
 
     private NavMeshAgent agent;
+    private Transform player;
+
+    private bool isDestinationSet = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        player = PlayerManager.Instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
-        needSetDestination = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(needSetDestination)
+        float distance = GetDistance();
+        if(distance <= lookRadius)
+        {
+            agent.SetDestination(player.position);
+            isDestinationSet = false;
+        }
+        else if (distance > lookRadius && isDestinationSet == false)
         {
             WalkAround();
-            needSetDestination = false;
         }
-        //Debug.Log(transform.position + "-" + destination);
-        //dont make this so presice
-        if(Vector3.Distance(transform.position, destination) < 0.1f)
-        {
-            Debug.Log("We Have reached our destination");
-            needSetDestination = true;
-        }
+
+        CheckAtWalkDestination();
+    }
+
+    float GetDistance()
+    {
+        return Vector3.Distance(player.position, transform.position);
     }
 
     void WalkAround()
     {
-        float randomX = Random.Range(-walkRange, walkRange);
-        float randomZ = Random.Range(-walkRange, walkRange);
-        destination = new Vector3(randomX, 0, randomZ);
-        agent.SetDestination(destination);
+        if(!isDestinationSet)
+        {
+            float randomX = Random.Range(-walkRange, walkRange);
+            float randomZ = Random.Range(-walkRange, walkRange);
+            destination = new Vector3(randomX, 0, randomZ);
+            agent.SetDestination(destination);
+            isDestinationSet = true;
+        }
+    }
 
+    void CheckAtWalkDestination()
+    {
+        if(isDestinationSet)
+        {
+            if (Vector3.Distance(transform.position, destination) < 2.1f)
+            {
+                Debug.Log("We Have reached our destination");
+                isDestinationSet = false;
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, lookRadius);
     }
 }
