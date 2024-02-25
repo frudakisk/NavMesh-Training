@@ -28,15 +28,32 @@ public class EnemyController : MonoBehaviour
         float distance = GetDistance();
         if(distance <= lookRadius)
         {
+            agent.stoppingDistance = 5.0f;
             agent.SetDestination(player.position);
             isDestinationSet = false;
+            if(distance <= agent.stoppingDistance)
+            {
+                //attack
+                FaceTarget();
+            }
         }
         else if (distance > lookRadius && isDestinationSet == false)
         {
+            agent.stoppingDistance = 0.1f;
             WalkAround();
         }
 
         CheckAtWalkDestination();
+    }
+
+    void FaceTarget()
+    {
+        //get direction of target
+        Vector3 direction = (player.position - transform.position).normalized;
+        //get rotation that points to the target
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        //set the rotation of our enemy
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
     }
 
     float GetDistance()
@@ -60,7 +77,7 @@ public class EnemyController : MonoBehaviour
     {
         if(isDestinationSet)
         {
-            if (Vector3.Distance(transform.position, destination) < 2.1f)
+            if (Vector3.Distance(transform.position, destination) < 0.1f)
             {
                 Debug.Log("We Have reached our destination");
                 isDestinationSet = false;
