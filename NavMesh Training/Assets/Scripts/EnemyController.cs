@@ -7,7 +7,7 @@ public class EnemyController : EntityBehaviour
 {
     //NavMesh variables
     private Vector3 destination;
-    private float lookRadius = 7.0f;
+    private float lookRadius = 10.0f;
     private float walkRange;
     private bool isDestinationSet = false;
 
@@ -134,7 +134,7 @@ public class EnemyController : EntityBehaviour
     /// <param name="distance">distance between the player and the enemy</param>
     void Chase(float distance)
     {
-        agent.stoppingDistance = 5.0f;
+        agent.stoppingDistance = 7.0f;
         agent.SetDestination(player.position);
         isDestinationSet = false;
         if (distance <= agent.stoppingDistance)
