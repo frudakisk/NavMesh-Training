@@ -14,14 +14,15 @@ public class EnemyController : MonoBehaviour
     //References
     private NavMeshAgent agent;
     private Transform player;
-
+    private GameManager gameManager;
     
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         player = PlayerManager.Instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
-        walkRange = NavMeshSurfaceRange();
+        walkRange = gameManager.NavMeshSurfaceRange();
     }
 
     // Update is called once per frame
@@ -99,6 +100,7 @@ public class EnemyController : MonoBehaviour
     {
         NavMeshHit hit;
         bool hitSuccess = NavMesh.SamplePosition(position, out hit, 0.1f, NavMesh.AllAreas);
+        Debug.Log($"{position} is a walkable position");
         return hitSuccess;
     }
 
@@ -148,25 +150,4 @@ public class EnemyController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, lookRadius);
     }
 
-
-    /// <summary>
-    /// The surface must be a perfect square for this method. Finds the distance from
-    /// the center of the square to an edge of a square
-    /// </summary>
-    /// <returns>float distance from center of square to edge of it</returns>
-    private float NavMeshSurfaceRange()
-    {
-        GameObject floor = PlayerManager.Instance.floor;
-        float distanceToEdge = floor.transform.localScale.x * 0.5f * floor.GetComponent<BoxCollider>().size.x - 1;
-        return distanceToEdge;
-
-    }
-
-    //create a function to keep player in bounds of the map
-    //Horizontal Constraints
-    //example:
-    //if(transform.position.x< -xRange)
-    //{
-    //    transform.position = new Vector3(-xRange, transform.position.y, transform.position.z);
-    //}
 }

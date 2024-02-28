@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private GameManager gameManager;
+
     private float horizontalInput;
     private float verticalInput;
     private float mouseX;
@@ -11,10 +13,17 @@ public class PlayerController : MonoBehaviour
     public float speed = 5.0f;
     public float mouseSpeed = 30.0f;
 
+    public GameObject bullet;
+    public float bulletForwardForce = 15.0f;
+    public float bulletUpwardForce = 3.0f;
+
+    private float floorRange;
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         Cursor.lockState = CursorLockMode.Locked;
+        floorRange = gameManager.NavMeshSurfaceRange();
     }
 
     // Update is called once per frame
@@ -27,5 +36,40 @@ public class PlayerController : MonoBehaviour
         transform.Translate(Vector3.forward * verticalInput * Time.deltaTime * speed);
         transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
         transform.Rotate(Vector3.up * mouseX * Time.deltaTime * mouseSpeed);
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            gameManager.ShootBullet(gameObject);
+        }
+
+        CheckBoundary();
     }
+
+    private void CheckBoundary()
+    {
+
+        if (transform.position.x > floorRange)
+        {
+            transform.position = new Vector3(floorRange, transform.position.y, transform.position.z);
+        }
+
+        if (transform.position.x < -floorRange)
+        {
+            transform.position = new Vector3(-floorRange, transform.position.y, transform.position.z);
+        }
+
+        if (transform.position.z > floorRange)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, floorRange);
+        }
+
+        if (transform.position.z < -floorRange)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, -floorRange);
+        }
+    }
+
+
+
+
 }
