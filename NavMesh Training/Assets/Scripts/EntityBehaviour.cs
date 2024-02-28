@@ -26,7 +26,7 @@ public class EntityBehaviour : MonoBehaviour
     /// </summary>
     public void ShootBullet(GameObject entity)
     {
-        Vector3 spawnPos = entity.transform.position + entity.transform.forward * 1.7f;
+        Vector3 spawnPos = (entity.transform.position + Vector3.up) + entity.transform.forward * 1.7f;
         Debug.Log($"Spawn Pos: {spawnPos}");
         //spawn the bullet just a little below the camera
         //amke sure the bullet has same rotation as player

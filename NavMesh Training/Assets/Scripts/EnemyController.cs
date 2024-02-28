@@ -15,6 +15,10 @@ public class EnemyController : EntityBehaviour
     private NavMeshAgent agent;
     private Transform player;
     private GameManager gameManager;
+
+    public const float shootTime = 1.0f;
+    private float sTime = shootTime;
+
     
     // Start is called before the first frame update
     void Start()
@@ -136,10 +140,16 @@ public class EnemyController : EntityBehaviour
         if (distance <= agent.stoppingDistance)
         {
             //attack
+            sTime = sTime - Time.deltaTime;
+            Debug.Log($"CurrentShootTime = {sTime}");
+            if(sTime < 0)
+            {
+                ShootBullet(gameObject);
+                sTime = shootTime;
+            }
             FaceTarget();
         }
     }
-
 
     /// <summary>
     /// Draws a sphere around this object to show the lookRadius in the editor

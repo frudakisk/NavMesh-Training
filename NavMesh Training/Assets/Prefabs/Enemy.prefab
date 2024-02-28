@@ -120,6 +120,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f76020bf899840d79485ce2c0dbb520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bullet: {fileID: 2486623711195568699, guid: 50493cabdb9c74585939dc6a28e82e2a, type: 3}
+  bulletForwardForce: 15
+  bulletUpwardForce: 3
 --- !u!1 &5545848385506309335
 GameObject:
   m_ObjectHideFlags: 0

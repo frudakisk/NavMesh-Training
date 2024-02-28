@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,34 +10,27 @@ public class GameManager : MonoBehaviour
     public float bulletForwardForce = 15.0f;
     public float bulletUpwardForce = 3.0f;
 
+    public GameObject enemy;
+    public int enemyCount;
+    private int spawnNumber;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        enemyCount = 0;
+        spawnNumber = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        enemyCount = FindObjectsOfType<EnemyController>().Length;
+        if(enemyCount == 0)
+        {
+            SpawnEnemyWave(spawnNumber);
+            spawnNumber++;
+        }
     }
-
-    ///// <summary>
-    ///// Shoots a bullet prefab in the forward direction that the player is facing.
-    ///// </summary>
-    //public void ShootBullet(GameObject entity)
-    //{
-    //    Vector3 spawnPos =  entity.transform.position + entity.transform.forward * 1.7f;
-    //    Debug.Log($"Spawn Pos: {spawnPos}");
-    //    //spawn the bullet just a little below the camera
-    //    //amke sure the bullet has same rotation as player
-    //    GameObject currentBullet = Instantiate(bullet, spawnPos, entity.transform.rotation);
-    //    //apply a forward and upward force for the bullet
-    //    var currentBulletRb = currentBullet.GetComponent<Rigidbody>();
-    //    currentBulletRb.AddForce(entity.transform.forward * bulletForwardForce, ForceMode.Impulse);
-    //    currentBulletRb.AddForce(Vector3.up * bulletUpwardForce, ForceMode.Impulse);
-    //    Debug.Log("Bullet was shot");
-    //}
 
     /// <summary>
     /// The surface must be a perfect square for this method. Finds the distance from
@@ -50,4 +44,44 @@ public class GameManager : MonoBehaviour
         return distanceToEdge;
 
     }
+
+    private void SpawnEnemyWave(int num)
+    {
+        for(int i = 0; i < num; i++)
+        {
+            Vector3 spawnPos = SpawnLocation();
+            Instantiate(enemy, spawnPos, Quaternion.identity);
+        }
+    }
+
+    private Vector3 SpawnLocation()
+    {
+        Vector3 spawnPos;
+        do
+        {
+            float range = NavMeshSurfaceRange();
+            float xPos = Random.Range(-range, range);
+            float zPos = Random.Range(-range, range);
+            spawnPos = new Vector3(xPos, 0, zPos);
+        } while (!IsPositionSpawnable(spawnPos));
+        return spawnPos;
+        
+        
+    }
+
+    private bool IsPositionSpawnable(Vector3 position)
+    {
+        NavMeshHit hit;
+        bool hitSuccess = NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas);
+        if(!hitSuccess)
+        {
+            Debug.Log("Spawn location not spawnable");
+        }
+        else
+        {
+            Debug.Log("Spawn position available");
+        }
+        return hitSuccess;
+    }
+
 }
