@@ -228,37 +228,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &144135060
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 144135061}
-  m_Layer: 0
-  m_Name: BulletSpawnPosition
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &144135061
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144135060}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1147774459}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &314735357
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,6 +238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 314735359}
   - component: {fileID: 314735358}
+  - component: {fileID: 314735360}
   m_Layer: 0
   m_Name: Game Manager
   m_TagString: Untagged
@@ -305,6 +275,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &314735360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314735357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 739d04a621c2240fc9e6f6aa1c891a49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 2486623711195568699, guid: 50493cabdb9c74585939dc6a28e82e2a, type: 3}
+  bulletForwardForce: 15
+  bulletUpwardForce: 3
 --- !u!1 &634729668
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,7 +881,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 963194228}
-  - {fileID: 144135061}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1147774460
@@ -1109,11 +1093,11 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 314735359}
   - {fileID: 705507995}
   - {fileID: 1046403388}
   - {fileID: 634729672}
   - {fileID: 2630222}
   - {fileID: 2048435940}
   - {fileID: 2981172412233876613}
-  - {fileID: 314735359}
   - {fileID: 1147774459}

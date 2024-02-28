@@ -21,22 +21,22 @@ public class GameManager : MonoBehaviour
         
     }
 
-    /// <summary>
-    /// Shoots a bullet prefab in the forward direction that the player is facing.
-    /// </summary>
-    public void ShootBullet(GameObject entity)
-    {
-        Vector3 spawnPos =  entity.transform.position + entity.transform.forward * 1.7f;
-        Debug.Log($"Spawn Pos: {spawnPos}");
-        //spawn the bullet just a little below the camera
-        //amke sure the bullet has same rotation as player
-        GameObject currentBullet = Instantiate(bullet, spawnPos, entity.transform.rotation);
-        //apply a forward and upward force for the bullet
-        var currentBulletRb = currentBullet.GetComponent<Rigidbody>();
-        currentBulletRb.AddForce(entity.transform.forward * bulletForwardForce, ForceMode.Impulse);
-        currentBulletRb.AddForce(Vector3.up * bulletUpwardForce, ForceMode.Impulse);
-        Debug.Log("Bullet was shot");
-    }
+    ///// <summary>
+    ///// Shoots a bullet prefab in the forward direction that the player is facing.
+    ///// </summary>
+    //public void ShootBullet(GameObject entity)
+    //{
+    //    Vector3 spawnPos =  entity.transform.position + entity.transform.forward * 1.7f;
+    //    Debug.Log($"Spawn Pos: {spawnPos}");
+    //    //spawn the bullet just a little below the camera
+    //    //amke sure the bullet has same rotation as player
+    //    GameObject currentBullet = Instantiate(bullet, spawnPos, entity.transform.rotation);
+    //    //apply a forward and upward force for the bullet
+    //    var currentBulletRb = currentBullet.GetComponent<Rigidbody>();
+    //    currentBulletRb.AddForce(entity.transform.forward * bulletForwardForce, ForceMode.Impulse);
+    //    currentBulletRb.AddForce(Vector3.up * bulletUpwardForce, ForceMode.Impulse);
+    //    Debug.Log("Bullet was shot");
+    //}
 
     /// <summary>
     /// The surface must be a perfect square for this method. Finds the distance from

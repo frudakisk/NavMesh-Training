@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : EntityBehaviour
 {
     private GameManager gameManager;
 
@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
     public float speed = 5.0f;
     public float mouseSpeed = 30.0f;
 
-    public GameObject bullet;
-    public float bulletForwardForce = 15.0f;
-    public float bulletUpwardForce = 3.0f;
 
     private float floorRange;
     // Start is called before the first frame update
@@ -39,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            gameManager.ShootBullet(gameObject);
+            ShootBullet(gameObject);
         }
 
         CheckBoundary();
