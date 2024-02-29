@@ -9,16 +9,37 @@ public class EntityBehaviour : MonoBehaviour
     public float bulletForwardForce = 15.0f;
     public float bulletUpwardForce = 3.0f;
 
+    public int health;
+
+    private Rigidbody rb;
+    private bool wasForceApplied = false;
+
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
-        
+        if(IsEntityDead())
+        {
+            if(gameObject.CompareTag("Player") && wasForceApplied == false)
+            {
+                //dont destroy the player but activate some sort of game
+                //stopping mechanism and maybe some animation
+                rb.freezeRotation = false;
+                rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
+                wasForceApplied = true;
+            }
+
+            if(!gameObject.CompareTag("Player"))
+            {
+                Destroy(gameObject);
+
+            }
+        }
     }
 
     /// <summary>
@@ -36,5 +57,22 @@ public class EntityBehaviour : MonoBehaviour
         currentBulletRb.AddForce(entity.transform.forward * bulletForwardForce, ForceMode.Impulse);
         currentBulletRb.AddForce(Vector3.up * bulletUpwardForce, ForceMode.Impulse);
         Debug.Log("Bullet was shot");
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Bullet"))
+        {
+            health--;
+        }
+    }
+
+    private bool IsEntityDead()
+    {
+        if(health == 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

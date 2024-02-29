@@ -1641,6 +1641,7 @@ MonoBehaviour:
   bullet: {fileID: 2486623711195568699, guid: 50493cabdb9c74585939dc6a28e82e2a, type: 3}
   bulletForwardForce: 15
   bulletUpwardForce: 3
+  health: 10
   speed: 5
   mouseSpeed: 100
 --- !u!54 &1147774461

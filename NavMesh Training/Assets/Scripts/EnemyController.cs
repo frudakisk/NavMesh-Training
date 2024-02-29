@@ -21,17 +21,20 @@ public class EnemyController : EntityBehaviour
 
     
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         player = PlayerManager.Instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
         walkRange = gameManager.NavMeshSurfaceRange();
+        health = 3;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         //always know distance between player and enemy
         float distance = GetDistance();
         if(distance <= lookRadius)
@@ -104,7 +107,6 @@ public class EnemyController : EntityBehaviour
     {
         NavMeshHit hit;
         bool hitSuccess = NavMesh.SamplePosition(position, out hit, 0.1f, NavMesh.AllAreas);
-        Debug.Log($"{position} is a walkable position");
         return hitSuccess;
     }
 
@@ -119,7 +121,6 @@ public class EnemyController : EntityBehaviour
         {
             if (Vector3.Distance(transform.position, destination) < 0.2f)
             {
-                Debug.Log("We Have reached our destination");
                 isDestinationSet = false;
             }
         }
@@ -134,21 +135,25 @@ public class EnemyController : EntityBehaviour
     /// <param name="distance">distance between the player and the enemy</param>
     void Chase(float distance)
     {
-        agent.stoppingDistance = 7.0f;
-        agent.SetDestination(player.position);
-        isDestinationSet = false;
-        if (distance <= agent.stoppingDistance)
+        
+        if(agent.isActiveAndEnabled)
         {
-            //attack
-            sTime = sTime - Time.deltaTime;
-            Debug.Log($"CurrentShootTime = {sTime}");
-            if(sTime < 0)
+            agent.stoppingDistance = 7.0f;
+            agent.SetDestination(player.position);
+            isDestinationSet = false;
+            if (distance <= agent.stoppingDistance)
             {
-                ShootBullet(gameObject);
-                sTime = shootTime;
+                //attack
+                sTime = sTime - Time.deltaTime;
+                if (sTime < 0)
+                {
+                    ShootBullet(gameObject);
+                    sTime = shootTime;
+                }
+                FaceTarget();
             }
-            FaceTarget();
         }
+
     }
 
     /// <summary>

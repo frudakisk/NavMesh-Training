@@ -16,16 +16,19 @@ public class PlayerController : EntityBehaviour
 
     private float floorRange;
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+        health = 5;
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         Cursor.lockState = CursorLockMode.Locked;
         floorRange = gameManager.NavMeshSurfaceRange();
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
+        base.Update();
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         mouseX = Input.GetAxis("Mouse X");
