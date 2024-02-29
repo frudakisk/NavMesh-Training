@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class EntityBehaviour : MonoBehaviour
 {
@@ -11,12 +12,16 @@ public class EntityBehaviour : MonoBehaviour
 
     public int health;
 
+
     private Rigidbody rb;
     private bool wasForceApplied = false;
+
+
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
+
         rb = GetComponent<Rigidbody>();
     }
 
@@ -75,4 +80,5 @@ public class EntityBehaviour : MonoBehaviour
         }
         return false;
     }
+
 }
