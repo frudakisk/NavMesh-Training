@@ -19,7 +19,7 @@ public class PlayerController : EntityBehaviour
     protected override void Start()
     {
         base.Start();
-        health = 5;
+        health = 10;
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         Cursor.lockState = CursorLockMode.Locked;
         floorRange = gameManager.NavMeshSurfaceRange();
