@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class GameManager : MonoBehaviour
     public int enemyCount;
     private int spawnNumber;
 
+    public TextMeshProUGUI waveNumberText;
+    public TextMeshProUGUI enemiesRemainingText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,9 +29,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         enemyCount = FindObjectsOfType<EnemyController>().Length;
+        enemiesRemainingText.text = "Enemies: " + enemyCount;
         if(enemyCount == 0)
         {
             SpawnEnemyWave(spawnNumber);
+            waveNumberText.text = "Wave: " + spawnNumber;
             spawnNumber++;
         }
     }

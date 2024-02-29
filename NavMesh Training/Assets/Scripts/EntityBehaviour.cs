@@ -16,12 +16,13 @@ public class EntityBehaviour : MonoBehaviour
     private Rigidbody rb;
     private bool wasForceApplied = false;
 
+    private HealthBar healthBar;
 
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
-
+        healthBar = GetComponent<HealthBar>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -69,6 +70,7 @@ public class EntityBehaviour : MonoBehaviour
         if(collision.gameObject.CompareTag("Bullet"))
         {
             health--;
+            UpdateHealthBar(health);
         }
     }
 
@@ -79,6 +81,11 @@ public class EntityBehaviour : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void UpdateHealthBar(int amount)
+    {
+        healthBar.healthSlider.value = amount;
     }
 
 }
