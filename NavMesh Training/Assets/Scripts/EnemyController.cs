@@ -7,7 +7,7 @@ public class EnemyController : EntityBehaviour
 {
     //NavMesh variables
     private Vector3 destination;
-    private float lookRadius = 10.0f;
+    private float lookRadius = 20.0f;
     private bool isDestinationSet = false;
 
     //References
