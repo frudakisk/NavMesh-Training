@@ -15,8 +15,14 @@ public class GameManager : MonoBehaviour
     public int enemyCount;
     private int spawnNumber;
 
+    public int shotsThatHitEnemy;
+    public int totalShots;
+    private float accuracy;
+
+
     public TextMeshProUGUI waveNumberText;
     public TextMeshProUGUI enemiesRemainingText;
+    public TextMeshProUGUI accuracyText;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +42,10 @@ public class GameManager : MonoBehaviour
             waveNumberText.text = "Wave: " + spawnNumber;
             spawnNumber++;
         }
+
+        accuracy = Accuracy(shotsThatHitEnemy, totalShots);
+        //update some sort of UI element
+        accuracyText.text = "Accuracy: " + accuracy.ToString("0.00") + "%";
     }
 
     /// <summary>
@@ -90,4 +100,14 @@ public class GameManager : MonoBehaviour
         return hitSuccess;
     }
 
+    public float Accuracy(int shotsHit, int totalShots)
+    {
+        float accuracy = (float)shotsHit / totalShots * 100;
+        Debug.Log($"Accuracy = {accuracy}");
+        if(float.IsNaN(accuracy))
+        {
+            return 0f;
+        }
+        return accuracy;
+    }
 }

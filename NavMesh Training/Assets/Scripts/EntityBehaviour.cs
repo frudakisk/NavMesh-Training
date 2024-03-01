@@ -54,15 +54,15 @@ public class EntityBehaviour : MonoBehaviour
     public void ShootBullet(GameObject entity)
     {
         Vector3 spawnPos = (entity.transform.position + Vector3.up) + entity.transform.forward * 1.7f;
-        Debug.Log($"Spawn Pos: {spawnPos}");
         //spawn the bullet just a little below the camera
-        //amke sure the bullet has same rotation as player
+        //make sure the bullet has same rotation as player
         GameObject currentBullet = Instantiate(bullet, spawnPos, entity.transform.rotation);
         //apply a forward and upward force for the bullet
         var currentBulletRb = currentBullet.GetComponent<Rigidbody>();
         currentBulletRb.AddForce(entity.transform.forward * bulletForwardForce, ForceMode.Impulse);
         currentBulletRb.AddForce(Vector3.up * bulletUpwardForce, ForceMode.Impulse);
-        Debug.Log("Bullet was shot");
+        //let bullet know who shot the bullet
+        currentBullet.GetComponent<BulletBehaviour>().entityThatShot = entity;
     }
 
     private void OnCollisionEnter(Collision collision)
