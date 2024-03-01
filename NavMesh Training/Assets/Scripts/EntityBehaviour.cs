@@ -29,6 +29,7 @@ public class EntityBehaviour : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        ///I probably can put these two statements in their respective class
         if(IsEntityDead())
         {
             if(gameObject.CompareTag("Player") && wasForceApplied == false)
@@ -51,20 +52,26 @@ public class EntityBehaviour : MonoBehaviour
     /// <summary>
     /// Shoots a bullet prefab in the forward direction that the player is facing.
     /// </summary>
+    /// <param name="entity">the game object that shot the bullet</param>
     public void ShootBullet(GameObject entity)
     {
-        Vector3 spawnPos = (entity.transform.position + Vector3.up) + entity.transform.forward * 1.7f;
-        Debug.Log($"Spawn Pos: {spawnPos}");
         //spawn the bullet just a little below the camera
-        //amke sure the bullet has same rotation as player
+        Vector3 spawnPos = (entity.transform.position + Vector3.up) + entity.transform.forward * 1.7f;
+        //make sure the bullet has same rotation as player
         GameObject currentBullet = Instantiate(bullet, spawnPos, entity.transform.rotation);
         //apply a forward and upward force for the bullet
         var currentBulletRb = currentBullet.GetComponent<Rigidbody>();
         currentBulletRb.AddForce(entity.transform.forward * bulletForwardForce, ForceMode.Impulse);
         currentBulletRb.AddForce(Vector3.up * bulletUpwardForce, ForceMode.Impulse);
-        Debug.Log("Bullet was shot");
+        //let bullet know who shot the bullet
+        currentBullet.GetComponent<BulletBehaviour>().entityThatShot = entity;
     }
 
+
+    /// <summary>
+    /// if a bullet hits an entity, their health goes down
+    /// </summary>
+    /// <param name="collision">colliding object</param>
     private void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("Bullet"))
@@ -74,6 +81,10 @@ public class EntityBehaviour : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks if the entity has 0 health
+    /// </summary>
+    /// <returns>true if no health, false otherwise</returns>
     private bool IsEntityDead()
     {
         if(health == 0)
@@ -83,6 +94,10 @@ public class EntityBehaviour : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Updates the entities healthbar based on the amount given
+    /// </summary>
+    /// <param name="amount">remaining health</param>
     private void UpdateHealthBar(int amount)
     {
         healthBar.healthSlider.value = amount;
