@@ -29,6 +29,7 @@ public class EntityBehaviour : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
+        ///I probably can put these two statements in their respective class
         if(IsEntityDead())
         {
             if(gameObject.CompareTag("Player") && wasForceApplied == false)
