@@ -40,7 +40,6 @@ public class PlayerController : EntityBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             ShootBullet(gameObject);
-            //gameManager.totalShots++; //dont update after shot, update after collision of any kind
         }
 
         CheckBoundary();

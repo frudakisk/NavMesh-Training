@@ -35,30 +35,35 @@ public class BulletBehaviour : MonoBehaviour
         if(entityThatShot.CompareTag("Player") &&
            collision.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("PLAYER hit an enemy");
             //add to accuracy
             gameManager.shotsThatHitEnemy++;
-            //gameManager.totalShots++;
+            gameManager.totalShots++;
         }
         else if (entityThatShot.CompareTag("Player"))
         {
-            //THIS BLOCK MIGHT BE ABLE TO BE DELETED
-            //this should only be active for the player not enemy bullets...
-            Debug.Log("Bullet from PLAYER did not hit anything");
-            //only look for bullets  that player shot, not enemy
-            //gameManager.totalShots++;
+            //if the player shoots and misses the enemy and
+            //bullet collides with something else
+            gameManager.totalShots++;
         }
 
-        gameManager.totalShots++;
         Destroy(gameObject);
 
     }
 
+
+    /// <summary>
+    /// Check the y position of a bullet and destroys it if too low.
+    /// Also added to total shots if the shot game from the player only
+    /// </summary>
     private void CheckBulletHeight()
     {
         if(transform.position.y <= -1.0f)
         {
             Destroy(gameObject);
+            if(entityThatShot.CompareTag("Player"))
+            {
+                gameManager.totalShots++;
+            }
         }
     }
 }
