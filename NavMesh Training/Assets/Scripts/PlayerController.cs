@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : EntityBehaviour
 {
-    private GameManager gameManager;
 
     private float horizontalInput;
     private float verticalInput;
@@ -13,22 +12,27 @@ public class PlayerController : EntityBehaviour
     public float speed = 5.0f;
     public float mouseSpeed = 30.0f;
 
-
-    private float floorRange;
+    private bool wasForceApplied = false;
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         health = 10;
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         Cursor.lockState = CursorLockMode.Locked;
-        floorRange = gameManager.NavMeshSurfaceRange();
     }
 
     // Update is called once per frame
-    protected override void Update()
+    void Update()
     {
-        base.Update();
+        if(IsEntityDead())
+        {
+            if(wasForceApplied == false)
+            {
+                rb.freezeRotation = false;
+                rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
+                wasForceApplied = true;
+            }
+        }
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         mouseX = Input.GetAxis("Mouse X");
@@ -45,6 +49,9 @@ public class PlayerController : EntityBehaviour
         CheckBoundary();
     }
 
+    /// <summary>
+    /// Checks if the player is out of bounds. Returns them to last safest spot
+    /// </summary>
     private void CheckBoundary()
     {
 

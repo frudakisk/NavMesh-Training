@@ -61,6 +61,11 @@ public class GameManager : MonoBehaviour
 
     }
 
+
+    /// <summary>
+    /// Spawns enemies in safe random location
+    /// </summary>
+    /// <param name="num">number of enemies to spawn</param>
     private void SpawnEnemyWave(int num)
     {
         for(int i = 0; i < num; i++)
@@ -70,12 +75,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Spawns an entity in a safe location that is on the nav mesh and not obstructed
+    /// by obstacles at first
+    /// </summary>
+    /// <returns></returns>
     private Vector3 SpawnLocation()
     {
         Vector3 spawnPos;
+        float range = NavMeshSurfaceRange();
         do
-        {
-            float range = NavMeshSurfaceRange();
+        {  
             float xPos = Random.Range(-range, range);
             float zPos = Random.Range(-range, range);
             spawnPos = new Vector3(xPos, 0, zPos);
@@ -85,6 +96,12 @@ public class GameManager : MonoBehaviour
         
     }
 
+
+    /// <summary>
+    /// Checks if a position is spawnable (not on top of an obstacle, in nav mesh range)
+    /// </summary>
+    /// <param name="position">the spawn position in question</param>
+    /// <returns>true if position is safe, false otherwise</returns>
     private bool IsPositionSpawnable(Vector3 position)
     {
         NavMeshHit hit;
@@ -100,10 +117,16 @@ public class GameManager : MonoBehaviour
         return hitSuccess;
     }
 
+
+    /// <summary>
+    /// Determines the accuracy of the players shots
+    /// </summary>
+    /// <param name="shotsHit">shot that hit an enemy</param>
+    /// <param name="totalShots">all shots the player took</param>
+    /// <returns>a float the represents the accuracy of the players aim</returns>
     public float Accuracy(int shotsHit, int totalShots)
     {
         float accuracy = (float)shotsHit / totalShots * 100;
-        Debug.Log($"Accuracy = {accuracy}");
         if(float.IsNaN(accuracy))
         {
             return 0f;

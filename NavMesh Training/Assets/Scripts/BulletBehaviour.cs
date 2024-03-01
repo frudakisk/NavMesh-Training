@@ -29,13 +29,10 @@ public class BulletBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if bullet coming from player hits an enemy, add tally to accuracy
-        //if bullet coming from enemy hits the player, do not do anything about it
-        //if bullet coming from player hits anything else but the enemy, subtract tally to accuracy
+        //if bullet coming from player hits an enemy, add tally
         if(entityThatShot.CompareTag("Player") &&
            collision.gameObject.CompareTag("Enemy"))
         {
-            //add to accuracy
             gameManager.shotsThatHitEnemy++;
             gameManager.totalShots++;
         }

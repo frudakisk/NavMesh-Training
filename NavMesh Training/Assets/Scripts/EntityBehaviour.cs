@@ -5,48 +5,31 @@ using UnityEngine.UI;
 
 public class EntityBehaviour : MonoBehaviour
 {
-
     public GameObject bullet;
     public float bulletForwardForce = 15.0f;
     public float bulletUpwardForce = 3.0f;
 
     public int health;
 
-
-    private Rigidbody rb;
-    private bool wasForceApplied = false;
+    protected Rigidbody rb;
+    protected GameManager gameManager;
+    protected float floorRange;
 
     private HealthBar healthBar;
-
 
     // Start is called before the first frame update
     protected virtual void Start()
     {
         healthBar = GetComponent<HealthBar>();
         rb = GetComponent<Rigidbody>();
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        floorRange = gameManager.NavMeshSurfaceRange();
     }
 
     // Update is called once per frame
-    protected virtual void Update()
+    void Update()
     {
-        ///I probably can put these two statements in their respective class
-        if(IsEntityDead())
-        {
-            if(gameObject.CompareTag("Player") && wasForceApplied == false)
-            {
-                //dont destroy the player but activate some sort of game
-                //stopping mechanism and maybe some animation
-                rb.freezeRotation = false;
-                rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
-                wasForceApplied = true;
-            }
 
-            if(!gameObject.CompareTag("Player"))
-            {
-                Destroy(gameObject);
-
-            }
-        }
     }
 
     /// <summary>
@@ -85,7 +68,7 @@ public class EntityBehaviour : MonoBehaviour
     /// Checks if the entity has 0 health
     /// </summary>
     /// <returns>true if no health, false otherwise</returns>
-    private bool IsEntityDead()
+    protected bool IsEntityDead()
     {
         if(health == 0)
         {

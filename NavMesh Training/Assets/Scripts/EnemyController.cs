@@ -7,14 +7,12 @@ public class EnemyController : EntityBehaviour
 {
     //NavMesh variables
     private Vector3 destination;
-    private float lookRadius = 10.0f;
-    private float walkRange;
+    private float lookRadius = 20.0f;
     private bool isDestinationSet = false;
 
     //References
     private NavMeshAgent agent;
     private Transform player;
-    private GameManager gameManager;
 
     public const float shootTime = 1.0f;
     private float sTime = shootTime;
@@ -24,17 +22,19 @@ public class EnemyController : EntityBehaviour
     protected override void Start()
     {
         base.Start();
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         player = PlayerManager.Instance.player.transform;
         agent = GetComponent<NavMeshAgent>();
-        walkRange = gameManager.NavMeshSurfaceRange();
         health = 3;
     }
 
     // Update is called once per frame
-    protected override void Update()
+    void Update()
     {
-        base.Update();
+        if(IsEntityDead())
+        {
+            Destroy(gameObject);
+        }
+
         //always know distance between player and enemy
         float distance = GetDistance();
         if(distance <= lookRadius)
@@ -86,8 +86,8 @@ public class EnemyController : EntityBehaviour
         {
             do
             {
-                float randomX = Random.Range(-walkRange, walkRange);
-                float randomZ = Random.Range(-walkRange, walkRange);
+                float randomX = Random.Range(-floorRange, floorRange);
+                float randomZ = Random.Range(-floorRange, floorRange);
                 destination = new Vector3(randomX, 0, randomZ);
             } while (!IsPositionWalkable(destination));
             //could also just set a higher obstacle avoidance radius in the agent
