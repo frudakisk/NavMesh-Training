@@ -138,7 +138,7 @@ public class EnemyController : EntityBehaviour
         
         if(agent.isActiveAndEnabled)
         {
-            agent.stoppingDistance = 7.0f;
+            agent.stoppingDistance = 10.0f;
             agent.SetDestination(player.position);
             isDestinationSet = false;
             if (distance <= agent.stoppingDistance)
