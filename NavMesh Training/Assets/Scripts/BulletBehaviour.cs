@@ -29,19 +29,23 @@ public class BulletBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        //if bullet coming from player hits an enemy, add tally
-        if(entityThatShot.CompareTag("Player") &&
-           collision.gameObject.CompareTag("Enemy"))
+        if(entityThatShot != null)
         {
-            gameManager.shotsThatHitEnemy++;
-            gameManager.totalShots++;
+            //if bullet coming from player hits an enemy, add tally
+            if (entityThatShot.CompareTag("Player") &&
+               collision.gameObject.CompareTag("Enemy"))
+            {
+                gameManager.shotsThatHitEnemy++;
+                gameManager.totalShots++;
+            }
+            else if (entityThatShot.CompareTag("Player"))
+            {
+                //if the player shoots and misses the enemy and
+                //bullet collides with something else
+                gameManager.totalShots++;
+            }
         }
-        else if (entityThatShot.CompareTag("Player"))
-        {
-            //if the player shoots and misses the enemy and
-            //bullet collides with something else
-            gameManager.totalShots++;
-        }
+
 
         Destroy(gameObject);
 
