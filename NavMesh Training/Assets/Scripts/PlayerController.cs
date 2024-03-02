@@ -31,21 +31,26 @@ public class PlayerController : EntityBehaviour
                 rb.freezeRotation = false;
                 rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
                 wasForceApplied = true;
+                GameManager.isGameOver = true;
             }
         }
+
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
         mouseX = Input.GetAxis("Mouse X");
 
-        transform.Translate(Vector3.forward * verticalInput * Time.deltaTime * speed);
-        transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
-        transform.Rotate(Vector3.up * mouseX * Time.deltaTime * mouseSpeed);
-
-        if(Input.GetKeyDown(KeyCode.Space))
+        if (!GameManager.isGameOver)
         {
-            ShootBullet(gameObject);
-        }
+            transform.Translate(Vector3.forward * verticalInput * Time.deltaTime * speed);
+            transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
+            transform.Rotate(Vector3.up * mouseX * Time.deltaTime * mouseSpeed);
 
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                ShootBullet(gameObject);
+            }
+        }
+        
         CheckBoundary();
     }
 
@@ -75,7 +80,6 @@ public class PlayerController : EntityBehaviour
             transform.position = new Vector3(transform.position.x, transform.position.y, -floorRange);
         }
     }
-
 
 
 

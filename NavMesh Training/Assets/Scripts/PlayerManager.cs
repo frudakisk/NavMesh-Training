@@ -21,4 +21,6 @@ public class PlayerManager : MonoBehaviour
     }
 
     //not keeping any persistant data, so no need for a load and save function
+
+    //I guess we need to keep track of the data after resetting idk bro
 }

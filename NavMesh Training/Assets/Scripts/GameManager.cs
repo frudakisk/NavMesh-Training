@@ -17,18 +17,35 @@ public class GameManager : MonoBehaviour
 
     public int shotsThatHitEnemy;
     public int totalShots;
-    private float accuracy;
+    public float accuracy; //use get and set stuff
+
+    public static bool isGameOver;
+    private bool isGameOverActive;
+    public GameObject gameOverPanel;
 
 
     public TextMeshProUGUI waveNumberText;
     public TextMeshProUGUI enemiesRemainingText;
     public TextMeshProUGUI accuracyText;
 
+    public int waveNumber;
+
+    private GameObject floor;
+
+    private void Awake()
+    {
+        floor = GameObject.Find("Mesh Floor");
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        
         enemyCount = 0;
         spawnNumber = 1;
+        waveNumber = 0;
+        isGameOver = false;
+        isGameOverActive = false;
     }
 
     // Update is called once per frame
@@ -39,13 +56,21 @@ public class GameManager : MonoBehaviour
         if(enemyCount == 0)
         {
             SpawnEnemyWave(spawnNumber);
-            waveNumberText.text = "Wave: " + spawnNumber;
-            spawnNumber++;
+            waveNumber++;
+            waveNumberText.text = "Wave: " + waveNumber;
+            spawnNumber += 2;
         }
 
         accuracy = Accuracy(shotsThatHitEnemy, totalShots);
         //update some sort of UI element
         accuracyText.text = "Accuracy: " + accuracy.ToString("0.00") + "%";
+
+        if(isGameOver && !isGameOverActive)
+        {
+            isGameOverActive = true;
+            StartCoroutine(GameOverRoutine());
+            Cursor.lockState = CursorLockMode.None;
+        }
     }
 
     /// <summary>
@@ -55,7 +80,14 @@ public class GameManager : MonoBehaviour
     /// <returns>float distance from center of square to edge of it</returns>
     public float NavMeshSurfaceRange()
     {
-        GameObject floor = PlayerManager.Instance.floor;
+        if(floor == null)
+        {
+            Debug.Log("Floor reference is missing");
+        }
+        else
+        {
+            Debug.Log("We have floor reference");
+        }
         float distanceToEdge = floor.transform.localScale.x * 0.5f * floor.GetComponent<BoxCollider>().size.x - 1;
         return distanceToEdge;
 
@@ -132,5 +164,11 @@ public class GameManager : MonoBehaviour
             return 0f;
         }
         return accuracy;
+    }
+
+    IEnumerator GameOverRoutine()
+    {
+        yield return new WaitForSeconds(3.0f);
+        gameOverPanel.SetActive(true);
     }
 }

@@ -22,7 +22,7 @@ public class EnemyController : EntityBehaviour
     protected override void Start()
     {
         base.Start();
-        player = PlayerManager.Instance.player.transform;
+        player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         health = 3;
     }
@@ -144,16 +144,21 @@ public class EnemyController : EntityBehaviour
             if (distance <= agent.stoppingDistance)
             {
                 //attack
-                sTime = sTime - Time.deltaTime;
-                if (sTime < 0)
-                {
-                    ShootBullet(gameObject);
-                    sTime = shootTime;
-                }
+                if (!GameManager.isGameOver) Attack();
                 FaceTarget();
             }
         }
 
+    }
+
+    void Attack()
+    {
+        sTime = sTime - Time.deltaTime;
+        if (sTime < 0)
+        {
+            ShootBullet(gameObject);
+            sTime = shootTime;
+        }
     }
 
     /// <summary>
