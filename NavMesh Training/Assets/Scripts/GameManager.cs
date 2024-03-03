@@ -32,6 +32,13 @@ public class GameManager : MonoBehaviour
 
     private GameObject floor;
 
+    public float score; //accuracy, wave #, health per wave, # enemies killed, time
+    private int time;
+    private int totalEnemiesSpawned;
+    private PlayerController player;
+    private int playerHealthOverTime;
+
+
     private void Awake()
     {
         floor = GameObject.Find("Mesh Floor");
@@ -40,12 +47,18 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.Find("Player").GetComponent<PlayerController>();
         enemyCount = 0;
         spawnNumber = 1;
         waveNumber = 0;
         isGameOver = false;
         isGameOverActive = false;
+        score = 0;
+        time = 0;
+        totalEnemiesSpawned = 0;
+        playerHealthOverTime = 0;
+
+        StartCoroutine(Timer());
     }
 
     // Update is called once per frame
@@ -56,6 +69,8 @@ public class GameManager : MonoBehaviour
         if(enemyCount == 0)
         {
             SpawnEnemyWave(spawnNumber);
+            playerHealthOverTime += player.health;
+            totalEnemiesSpawned += spawnNumber;
             waveNumber++;
             waveNumberText.text = "Wave: " + waveNumber;
             spawnNumber += 2;
@@ -68,6 +83,7 @@ public class GameManager : MonoBehaviour
         if(isGameOver && !isGameOverActive)
         {
             isGameOverActive = true;
+            score = CalculateScore();
             StartCoroutine(GameOverRoutine());
             Cursor.lockState = CursorLockMode.None;
         }
@@ -170,5 +186,29 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3.0f);
         gameOverPanel.SetActive(true);
+    }
+
+    IEnumerator Timer()
+    {
+        while(!isGameOver)
+        {
+            yield return new WaitForSeconds(1.0f);
+            time++;
+            Debug.Log("Time: " + time);
+        }
+    }
+
+    float CalculateScore()
+    {
+        //the higher the accuracy, the better the score
+        //the higher the waveNumber, the better the score
+        //the higher the time, the worse the score
+        //the higher the enemiesKilled, the better the score
+        //the higher the playerHealthOverTime, the better the score
+        int enemiesKilled = totalEnemiesSpawned - enemyCount;
+        Debug.Log($"accuracy = {accuracy}\nwaveNumber = {waveNumber}\nenemiesKilled = {enemiesKilled}\nplayerHealthOverTime = {playerHealthOverTime}\ntime = {time}");
+        float temp = (float)((accuracy * (waveNumber * 100)) * enemiesKilled + playerHealthOverTime) - time;
+        Debug.Log("Score = " + temp);
+        return temp;
     }
 }
