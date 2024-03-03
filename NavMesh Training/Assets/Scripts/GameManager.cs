@@ -11,9 +11,11 @@ public class GameManager : MonoBehaviour
     public float bulletForwardForce = 15.0f;
     public float bulletUpwardForce = 3.0f;
 
-    public GameObject enemy;
+    public GameObject[] enemys; //0 is normal, 1 is boss so far
     public int enemyCount;
+    public int bossSpawnNumber;
     private int spawnNumber;
+ 
 
     public int shotsThatHitEnemy;
     public int totalShots;
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         enemyCount = 0;
+        bossSpawnNumber = 1;
         spawnNumber = 1;
         waveNumber = 0;
         isGameOver = false;
@@ -68,12 +71,23 @@ public class GameManager : MonoBehaviour
         enemiesRemainingText.text = "Enemies: " + enemyCount;
         if(enemyCount == 0)
         {
-            SpawnEnemyWave(spawnNumber);
-            playerHealthOverTime += player.health;
-            totalEnemiesSpawned += spawnNumber;
             waveNumber++;
             waveNumberText.text = "Wave: " + waveNumber;
-            spawnNumber += 2;
+
+            if (waveNumber % 5 == 0)
+            {
+                SpawnEnemyWave(bossSpawnNumber, enemys[1]);
+                totalEnemiesSpawned += bossSpawnNumber;
+                bossSpawnNumber++;
+            } else
+            {
+                SpawnEnemyWave(spawnNumber, enemys[0]);
+                totalEnemiesSpawned += spawnNumber;
+                spawnNumber += 2;
+            }
+            
+            playerHealthOverTime += player.health;
+
         }
 
         accuracy = Accuracy(shotsThatHitEnemy, totalShots);
@@ -114,12 +128,12 @@ public class GameManager : MonoBehaviour
     /// Spawns enemies in safe random location
     /// </summary>
     /// <param name="num">number of enemies to spawn</param>
-    private void SpawnEnemyWave(int num)
+    private void SpawnEnemyWave(int num, GameObject enemyType)
     {
         for(int i = 0; i < num; i++)
         {
             Vector3 spawnPos = SpawnLocation();
-            Instantiate(enemy, spawnPos, Quaternion.identity);
+            Instantiate(enemyType, spawnPos, Quaternion.identity);
         }
     }
 
@@ -209,6 +223,7 @@ public class GameManager : MonoBehaviour
         Debug.Log($"accuracy = {accuracy}\nwaveNumber = {waveNumber}\nenemiesKilled = {enemiesKilled}\nplayerHealthOverTime = {playerHealthOverTime}\ntime = {time}");
         float temp = (float)((accuracy * (waveNumber * 100)) * enemiesKilled + playerHealthOverTime) - time;
         Debug.Log("Score = " + temp);
+        if (temp < 0) return 0f;
         return temp;
     }
 }

@@ -47,7 +47,7 @@ public class PlayerController : EntityBehaviour
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                ShootBullet(gameObject);
+                ShootBullet(gameObject, 1.7f, Vector3.up);
             }
         }
         

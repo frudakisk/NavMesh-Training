@@ -7,15 +7,15 @@ public class EnemyController : EntityBehaviour
 {
     //NavMesh variables
     private Vector3 destination;
-    private float lookRadius = 20.0f;
-    private bool isDestinationSet = false;
+    protected float lookRadius = 20.0f;
+    protected bool isDestinationSet = false;
 
     //References
-    private NavMeshAgent agent;
+    protected NavMeshAgent agent;
     private Transform player;
 
-    public const float shootTime = 1.0f;
-    private float sTime = shootTime;
+    public float shootTime = 1.0f;
+    protected float sTime;
 
     
     // Start is called before the first frame update
@@ -25,6 +25,7 @@ public class EnemyController : EntityBehaviour
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         health = 3;
+        sTime = shootTime;
     }
 
     // Update is called once per frame
@@ -54,7 +55,7 @@ public class EnemyController : EntityBehaviour
     /// Have the enemy agent always face the player while the player is in the stoppingDistance
     /// of this object
     /// </summary>
-    void FaceTarget()
+    protected void FaceTarget()
     {
         //get direction of target
         Vector3 direction = (player.position - transform.position).normalized;
@@ -69,7 +70,7 @@ public class EnemyController : EntityBehaviour
     /// </summary>
     /// <returns>a float that represents the distance betweeb
     /// player and enemy</returns>
-    float GetDistance()
+    protected float GetDistance()
     {
         return Vector3.Distance(player.position, transform.position);
     }
@@ -80,7 +81,7 @@ public class EnemyController : EntityBehaviour
     /// Checks to see if the destination is within the NavMesh and
     /// is a walkable spot in the NavMesh.
     /// </summary>
-    void WalkAround()
+    protected void WalkAround()
     {
         if(!isDestinationSet)
         {
@@ -103,7 +104,7 @@ public class EnemyController : EntityBehaviour
     /// </summary>
     /// <param name="position">a Vector3 position of desired destination</param>
     /// <returns>True if position is a walkable spot, false otherwise</returns>
-    private bool IsPositionWalkable(Vector3 position)
+    protected bool IsPositionWalkable(Vector3 position)
     {
         NavMeshHit hit;
         bool hitSuccess = NavMesh.SamplePosition(position, out hit, 0.1f, NavMesh.AllAreas);
@@ -115,7 +116,7 @@ public class EnemyController : EntityBehaviour
     /// Checks if we are at our destination set by our WalkAround() method
     /// and has a small offset so we can deal with floating point inaccuracy
     /// </summary>
-    void CheckAtWalkDestination()
+    protected void CheckAtWalkDestination()
     {
         if(isDestinationSet)
         {
@@ -133,7 +134,7 @@ public class EnemyController : EntityBehaviour
     /// is within our stoppingDistance.
     /// </summary>
     /// <param name="distance">distance between the player and the enemy</param>
-    void Chase(float distance)
+    protected void Chase(float distance)
     {
         
         if(agent.isActiveAndEnabled)
@@ -151,12 +152,12 @@ public class EnemyController : EntityBehaviour
 
     }
 
-    void Attack()
+    protected virtual void Attack()
     {
         sTime = sTime - Time.deltaTime;
         if (sTime < 0)
         {
-            ShootBullet(gameObject);
+            ShootBullet(gameObject, 1.7f, Vector3.up);
             sTime = shootTime;
         }
     }
