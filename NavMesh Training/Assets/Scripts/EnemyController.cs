@@ -7,7 +7,7 @@ public class EnemyController : EntityBehaviour
 {
     //NavMesh variables
     private Vector3 destination;
-    private float lookRadius = 20.0f;
+    protected float lookRadius = 20.0f;
     private bool isDestinationSet = false;
 
     //References
@@ -15,7 +15,7 @@ public class EnemyController : EntityBehaviour
     private Transform player;
 
     public const float shootTime = 1.0f;
-    private float sTime = shootTime;
+    protected float sTime = shootTime;
 
     
     // Start is called before the first frame update
@@ -151,12 +151,12 @@ public class EnemyController : EntityBehaviour
 
     }
 
-    void Attack()
+    protected virtual void Attack()
     {
         sTime = sTime - Time.deltaTime;
         if (sTime < 0)
         {
-            ShootBullet(gameObject);
+            ShootBullet(gameObject, 1.7f);
             sTime = shootTime;
         }
     }
