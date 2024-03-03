@@ -556,6 +556,7 @@ MonoBehaviour:
   enemiesRemainingText: {fileID: 410073524}
   accuracyText: {fileID: 1664864528}
   waveNumber: 0
+  score: 0
 --- !u!4 &329786176 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8367089784968136610, guid: f76fc89dd4954469680879e5b759fc8e, type: 3}
@@ -4596,8 +4597,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 314735359}
   - {fileID: 705507995}
+  - {fileID: 1168218633}
+  - {fileID: 53077875}
   - {fileID: 553467308}
   - {fileID: 737564476}
   - {fileID: 922892175}
-  - {fileID: 1168218633}
-  - {fileID: 53077875}

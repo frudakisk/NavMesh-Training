@@ -23,9 +23,7 @@ public class CanvasController : MonoBehaviour
     void Update()
     {
         //no highscore set yet
-
-        //no score algirithm set
-
+        scoreText.text = "Score\n" + gameManager.score.ToString("0.00");
         WaveText.text = "Waves Survived\n" + gameManager.waveNumber;
         accuracyText.text = "Accuracy\n" + gameManager.accuracy.ToString("0.00") + "%";
 
