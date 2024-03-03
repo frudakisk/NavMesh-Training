@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 3470529357509633082}
   m_Layer: 0
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -198,8 +198,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1974681495395692399}
   - {fileID: 4233058259317386778}
@@ -258,7 +258,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7927144799803872216}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -291,8 +291,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bullet: {fileID: 2486623711195568699, guid: 50493cabdb9c74585939dc6a28e82e2a, type: 3}
   bulletForwardForce: 15
-  bulletUpwardForce: 3
-  health: 0
+  bulletUpwardForce: 1
+  health: 20
 --- !u!114 &3470529357509633082
 MonoBehaviour:
   m_ObjectHideFlags: 0

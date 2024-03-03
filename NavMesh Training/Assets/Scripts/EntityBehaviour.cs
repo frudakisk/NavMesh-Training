@@ -36,10 +36,10 @@ public class EntityBehaviour : MonoBehaviour
     /// Shoots a bullet prefab in the forward direction that the player is facing.
     /// </summary>
     /// <param name="entity">the game object that shot the bullet</param>
-    public void ShootBullet(GameObject entity, float shootPosition)
+    public void ShootBullet(GameObject entity, float shootForwardPosition, Vector3 shootUpwardPosition)
     {
         //spawn the bullet just a little below the camera
-        Vector3 spawnPos = (entity.transform.position + Vector3.up) + entity.transform.forward * shootPosition;
+        Vector3 spawnPos = (entity.transform.position + shootUpwardPosition) + entity.transform.forward * shootForwardPosition;
         //make sure the bullet has same rotation as player
         GameObject currentBullet = Instantiate(bullet, spawnPos, entity.transform.rotation);
         //apply a forward and upward force for the bullet
