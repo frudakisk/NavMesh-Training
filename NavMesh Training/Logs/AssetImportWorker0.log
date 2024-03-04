@@ -207,3 +207,43 @@ Received Import Request.
 Start importing Assets/Scenes/MainMenuScene.unity using Guid(f34147a04fe9541fb89797f21243900c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '45051c7b608971f1080d62822102b950') in 0.003698 seconds
 Number of updated asset objects reloaded before import = 0
 Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 112.127792 seconds.
+  path: Assets/Scenes/SampleScene.unity
+  artifactKey: Guid(9fc0d4010bbf28b4594072e72b8655ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/SampleScene.unity using Guid(9fc0d4010bbf28b4594072e72b8655ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5f459d30e78939763fc11f9c515ea4e1') in 0.000604 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 26.782452 seconds.
+  path: Assets/Scenes/MainMenuScene.unity
+  artifactKey: Guid(f34147a04fe9541fb89797f21243900c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/MainMenuScene.unity using Guid(f34147a04fe9541fb89797f21243900c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '494f47e3936878075528a89211bb3118') in 0.001085 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 253.030210 seconds.
+  path: Assets/TextMesh Pro/Resources/Fonts & Materials/FortunerHeavy SDF.asset
+  artifactKey: Guid(60bfbed8b5d8b40b0baf050237822b68) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/TextMesh Pro/Resources/Fonts & Materials/FortunerHeavy SDF.asset using Guid(60bfbed8b5d8b40b0baf050237822b68) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '977cf24759097eb674db6dd894fafe83') in 0.226952 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 6
+========================================================================
+Received Import Request.
+  Time since last request: 112.500868 seconds.
+  path: Assets/Scenes/MainMenuScene.unity
+  artifactKey: Guid(f34147a04fe9541fb89797f21243900c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/MainMenuScene.unity using Guid(f34147a04fe9541fb89797f21243900c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c984735dc6354a958df2631d84cc6fe4') in 0.001320 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 0
+========================================================================
+Received Import Request.
+  Time since last request: 211.183214 seconds.
+  path: Assets/TextMesh Pro/Resources/Fonts & Materials/FortunerHeavy SDF.asset
+  artifactKey: Guid(60bfbed8b5d8b40b0baf050237822b68) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/TextMesh Pro/Resources/Fonts & Materials/FortunerHeavy SDF.asset using Guid(60bfbed8b5d8b40b0baf050237822b68) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a16b5c782de02277ae75818573e81607') in 0.049559 seconds
+Number of updated asset objects reloaded before import = 0
+Number of asset objects unloaded after import = 6
