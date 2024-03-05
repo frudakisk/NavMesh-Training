@@ -17,6 +17,9 @@ public class EntityBehaviour : MonoBehaviour
 
     private HealthBar healthBar;
 
+    protected AudioSource audioSource;
+
+
     // Start is called before the first frame update
     protected virtual void Start()
     {
@@ -24,6 +27,7 @@ public class EntityBehaviour : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
         floorRange = gameManager.NavMeshSurfaceRange();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -55,13 +59,18 @@ public class EntityBehaviour : MonoBehaviour
     /// if a bullet hits an entity, their health goes down
     /// </summary>
     /// <param name="collision">colliding object</param>
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.CompareTag("Bullet"))
         {
+            if(gameObject.CompareTag("Player"))
+            {
+
+            }
             health--;
             UpdateHealthBar(health);
         }
+
     }
 
     /// <summary>

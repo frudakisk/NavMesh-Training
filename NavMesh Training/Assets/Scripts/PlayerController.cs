@@ -13,12 +13,17 @@ public class PlayerController : EntityBehaviour
     public float mouseSpeed = 30.0f;
 
     private bool wasForceApplied = false;
+
+    public AudioClip hitNoise;
+
+    public GameObject damagePanel;
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         health = 10;
         Cursor.lockState = CursorLockMode.Locked;
+        audioSource = GetComponent<AudioSource>(); //probably can refactor
     }
 
     // Update is called once per frame
@@ -81,6 +86,26 @@ public class PlayerController : EntityBehaviour
         }
     }
 
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
+        if(collision.gameObject.CompareTag("Bullet"))
+        {
+            audioSource.PlayOneShot(hitNoise, 1.0f);
+            StartCoroutine(DamagePanelRoutine());
+        }
+    }
 
+    private IEnumerator DamagePanelRoutine()
+    {
+        for(int i = 0; i < 5; i++)
+        {
+            damagePanel.SetActive(!damagePanel.activeSelf);
+            yield return new WaitForSeconds(0.01f);
+            damagePanel.SetActive(!damagePanel.activeSelf);
+            yield return new WaitForSeconds(0.01f);
+        }
+        
 
+    }
 }

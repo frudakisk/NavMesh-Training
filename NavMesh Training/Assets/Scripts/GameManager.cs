@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI waveNumberText;
     public TextMeshProUGUI enemiesRemainingText;
     public TextMeshProUGUI accuracyText;
+    public TextMeshProUGUI largeWaveNumberText;
 
     public int waveNumber;
 
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
     private PlayerController player;
     private int playerHealthOverTime;
 
-
+    private bool spawningInAction;
     private void Awake()
     {
         floor = GameObject.Find("Mesh Floor");
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
         time = 0;
         totalEnemiesSpawned = 0;
         playerHealthOverTime = 0;
+        spawningInAction = false;
 
         StartCoroutine(Timer());
     }
@@ -69,24 +71,24 @@ public class GameManager : MonoBehaviour
     {
         enemyCount = FindObjectsOfType<EnemyController>().Length;
         enemiesRemainingText.text = "Enemies: " + enemyCount;
-        if(enemyCount == 0)
+        if(enemyCount == 0 && spawningInAction == false)
         {
             waveNumber++;
             waveNumberText.text = "Wave: " + waveNumber;
-
-            if (waveNumber % 5 == 0)
-            {
-                SpawnEnemyWave(bossSpawnNumber, enemys[1]);
-                totalEnemiesSpawned += bossSpawnNumber;
-                bossSpawnNumber++;
-            } else
-            {
-                SpawnEnemyWave(spawnNumber, enemys[0]);
-                totalEnemiesSpawned += spawnNumber;
-                spawnNumber += 2;
-            }
-            
             playerHealthOverTime += player.health;
+            StartCoroutine(SpawnEnemyRoutine());            
+            //if (waveNumber % 5 == 0)
+            //{
+            //    SpawnEnemyWave(bossSpawnNumber, enemys[1]);
+            //    totalEnemiesSpawned += bossSpawnNumber;
+            //    bossSpawnNumber++;
+            //}
+            //else
+            //{
+            //    SpawnEnemyWave(spawnNumber, enemys[0]);
+            //    totalEnemiesSpawned += spawnNumber;
+            //    spawnNumber += 2;
+            //}
 
         }
 
@@ -225,5 +227,29 @@ public class GameManager : MonoBehaviour
         Debug.Log("Score = " + temp);
         if (temp < 0) return 0f;
         return temp;
+    }
+
+
+    private IEnumerator SpawnEnemyRoutine()
+    {
+        spawningInAction = true;
+        //wait a couple of seconds before spawning enemies
+        largeWaveNumberText.gameObject.SetActive(!largeWaveNumberText.gameObject.activeSelf);
+        largeWaveNumberText.text = "Wave " + waveNumber;
+        yield return new WaitForSeconds(3.0f);
+        if (waveNumber % 5 == 0)
+        {
+            SpawnEnemyWave(bossSpawnNumber, enemys[1]);
+            totalEnemiesSpawned += bossSpawnNumber;
+            bossSpawnNumber++;
+        }
+        else
+        {
+            SpawnEnemyWave(spawnNumber, enemys[0]);
+            totalEnemiesSpawned += spawnNumber;
+            spawnNumber += 2;
+        }
+        largeWaveNumberText.gameObject.SetActive(!largeWaveNumberText.gameObject.activeSelf);
+        spawningInAction = false;
     }
 }
