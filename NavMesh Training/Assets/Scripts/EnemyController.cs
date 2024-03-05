@@ -17,23 +17,31 @@ public class EnemyController : EntityBehaviour
     public float shootTime = 1.0f;
     protected float sTime;
 
-    
+    private bool deathAnimationActive;
+    public ParticleSystem deathParticles;
+
+    public List<AudioClip> deathGrunts = new List<AudioClip>();
+    private AudioSource audioSource;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
         health = 3;
         sTime = shootTime;
+        deathAnimationActive = false;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(IsEntityDead())
+        if (IsEntityDead() && deathAnimationActive == false)
         {
-            Destroy(gameObject);
+            StartCoroutine(DeathRoutine());
         }
 
         //always know distance between player and enemy
@@ -44,8 +52,12 @@ public class EnemyController : EntityBehaviour
         }
         else if (distance > lookRadius && isDestinationSet == false)
         {
-            agent.stoppingDistance = 0.1f;
-            WalkAround();
+            if(agent.enabled == true)
+            {
+                agent.stoppingDistance = 0.1f;
+                WalkAround();
+            }
+            
         }
 
         CheckAtWalkDestination();
@@ -162,7 +174,20 @@ public class EnemyController : EntityBehaviour
         }
     }
 
-    //if the bullet came from an enemy and hit an enemy, do not lose health
+    protected IEnumerator DeathRoutine()
+    {
+        deathAnimationActive = true;
+        agent.enabled = false;
+        rb.isKinematic = false;
+        rb.AddForce(new Vector3(0, 5, -1), ForceMode.Impulse);
+        AudioClip clip = deathGrunts[Random.Range(0, deathGrunts.Count)];
+        audioSource.PlayOneShot(clip, 1.0f);
+        yield return new WaitForSeconds(3.0f);
+        ParticleSystem particles = Instantiate(deathParticles, transform.position + transform.up, Quaternion.identity);
+        particles.Play();
+        
+        Destroy(gameObject);
+    }
 
 
     /// <summary>
