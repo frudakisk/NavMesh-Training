@@ -13,12 +13,15 @@ public class PlayerController : EntityBehaviour
     public float mouseSpeed = 30.0f;
 
     private bool wasForceApplied = false;
+
+    public AudioClip hitNoise;
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         health = 10;
         Cursor.lockState = CursorLockMode.Locked;
+        audioSource = GetComponent<AudioSource>(); //probably can refactor
     }
 
     // Update is called once per frame
@@ -81,6 +84,12 @@ public class PlayerController : EntityBehaviour
         }
     }
 
-
-
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        base.OnCollisionEnter(collision);
+        if(collision.gameObject.CompareTag("Bullet"))
+        {
+            audioSource.PlayOneShot(hitNoise, 1.0f);
+        }
+    }
 }
