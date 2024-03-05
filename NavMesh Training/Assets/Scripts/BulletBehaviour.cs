@@ -31,7 +31,7 @@ public class BulletBehaviour : MonoBehaviour
     {
         if(entityThatShot != null)
         {
-            //if bullet coming from player hits an enemy, add tally
+            //if bullet coming from player & hits an enemy, add tally
             if (entityThatShot.CompareTag("Player") &&
                collision.gameObject.CompareTag("Enemy"))
             {
@@ -43,6 +43,15 @@ public class BulletBehaviour : MonoBehaviour
                 //if the player shoots and misses the enemy and
                 //bullet collides with something else
                 gameManager.totalShots++;
+            }
+            else if (entityThatShot.CompareTag("Enemy") &&
+                collision.gameObject.CompareTag("Enemy"))
+            {
+                //enemy hit enemy, do not take health away
+                EntityBehaviour objectHit = collision.gameObject.GetComponent<EntityBehaviour>();
+                objectHit.health++;
+                objectHit.UpdateHealthBar(objectHit.health);
+
             }
         }
 

@@ -162,6 +162,9 @@ public class EnemyController : EntityBehaviour
         }
     }
 
+    //if the bullet came from an enemy and hit an enemy, do not lose health
+
+
     /// <summary>
     /// Draws a sphere around this object to show the lookRadius in the editor
     /// </summary>

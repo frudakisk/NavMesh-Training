@@ -81,7 +81,7 @@ public class EntityBehaviour : MonoBehaviour
     /// Updates the entities healthbar based on the amount given
     /// </summary>
     /// <param name="amount">remaining health</param>
-    private void UpdateHealthBar(int amount)
+    public void UpdateHealthBar(int amount)
     {
         healthBar.healthSlider.value = amount;
     }
