@@ -21,7 +21,6 @@ public class EnemyController : EntityBehaviour
     public ParticleSystem deathParticles;
 
     public List<AudioClip> deathGrunts = new List<AudioClip>();
-    private AudioSource audioSource;
 
     // Start is called before the first frame update
     protected override void Start()
