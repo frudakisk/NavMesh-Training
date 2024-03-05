@@ -20,15 +20,20 @@ public class EnemyController : EntityBehaviour
     private bool deathAnimationActive;
     public ParticleSystem deathParticles;
 
+    public List<AudioClip> deathGrunts = new List<AudioClip>();
+    private AudioSource audioSource;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
+        audioSource = GetComponent<AudioSource>();
         health = 3;
         sTime = shootTime;
         deathAnimationActive = false;
+
     }
 
     // Update is called once per frame
@@ -175,9 +180,12 @@ public class EnemyController : EntityBehaviour
         agent.enabled = false;
         rb.isKinematic = false;
         rb.AddForce(new Vector3(0, 5, -1), ForceMode.Impulse);
+        AudioClip clip = deathGrunts[Random.Range(0, deathGrunts.Count)];
+        audioSource.PlayOneShot(clip, 1.0f);
         yield return new WaitForSeconds(3.0f);
         ParticleSystem particles = Instantiate(deathParticles, transform.position + transform.up, Quaternion.identity);
         particles.Play();
+        
         Destroy(gameObject);
     }
 
