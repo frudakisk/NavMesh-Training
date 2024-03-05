@@ -17,7 +17,7 @@ public class EnemyController : EntityBehaviour
     public float shootTime = 1.0f;
     protected float sTime;
 
-    
+    private bool deathAnimationActive;
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -26,14 +26,15 @@ public class EnemyController : EntityBehaviour
         agent = GetComponent<NavMeshAgent>();
         health = 3;
         sTime = shootTime;
+        deathAnimationActive = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(IsEntityDead())
+        if (IsEntityDead() && deathAnimationActive == false)
         {
-            Destroy(gameObject);
+            StartCoroutine(DeathRoutine());
         }
 
         //always know distance between player and enemy
@@ -44,8 +45,12 @@ public class EnemyController : EntityBehaviour
         }
         else if (distance > lookRadius && isDestinationSet == false)
         {
-            agent.stoppingDistance = 0.1f;
-            WalkAround();
+            if(agent.enabled == true)
+            {
+                agent.stoppingDistance = 0.1f;
+                WalkAround();
+            }
+            
         }
 
         CheckAtWalkDestination();
@@ -162,7 +167,15 @@ public class EnemyController : EntityBehaviour
         }
     }
 
-    //if the bullet came from an enemy and hit an enemy, do not lose health
+    protected IEnumerator DeathRoutine()
+    {
+        deathAnimationActive = true;
+        agent.enabled = false;
+        rb.isKinematic = false;
+        rb.AddForce(new Vector3(0, 5, -1), ForceMode.Impulse);
+        yield return new WaitForSeconds(3.0f);
+        Destroy(gameObject);
+    }
 
 
     /// <summary>

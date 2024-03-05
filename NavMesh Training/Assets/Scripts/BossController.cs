@@ -20,7 +20,7 @@ public class BossController : EnemyController
         Debug.Log($"sTime in boss is {sTime}");
         if (IsEntityDead())
         {
-            Destroy(gameObject);
+            StartCoroutine(DeathRoutine());
         }
 
         //always know distance between player and enemy
