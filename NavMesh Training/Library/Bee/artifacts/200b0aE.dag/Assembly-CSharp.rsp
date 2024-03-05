@@ -375,6 +375,7 @@
 "Assets/Scripts/GameManager.cs"
 "Assets/Scripts/HealthBar.cs"
 "Assets/Scripts/MainMenuController.cs"
+"Assets/Scripts/ParticleController.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/PlayerManager.cs"
 -langversion:9.0

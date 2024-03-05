@@ -126,6 +126,8 @@ MonoBehaviour:
   bulletForwardForce: 15
   bulletUpwardForce: 3
   health: 3
+  shootTime: 1
+  deathParticles: {fileID: 1360542044852806370, guid: 19a1b76d174324f3d97098c14b2779db, type: 3}
 --- !u!114 &8654781665139995245
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ public class EnemyController : EntityBehaviour
     protected float sTime;
 
     private bool deathAnimationActive;
+    public ParticleSystem deathParticles;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -174,6 +176,8 @@ public class EnemyController : EntityBehaviour
         rb.isKinematic = false;
         rb.AddForce(new Vector3(0, 5, -1), ForceMode.Impulse);
         yield return new WaitForSeconds(3.0f);
+        ParticleSystem particles = Instantiate(deathParticles, transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+        particles.Play();
         Destroy(gameObject);
     }
 
