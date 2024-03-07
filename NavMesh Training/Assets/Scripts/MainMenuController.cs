@@ -12,6 +12,7 @@ using UnityEditor;
 public class MainMenuController : MonoBehaviour
 {
     public GameObject howToPlayPanel;
+    public GameObject leaderboardPanel;
     public TMP_InputField nameField;
     public Button playButton;
 
@@ -45,6 +46,11 @@ public class MainMenuController : MonoBehaviour
     public void ToggleHowToPlayPanel()
     {
         howToPlayPanel.SetActive(!howToPlayPanel.activeSelf);
+    }
+
+    public void ToggleLeaderboaradPanel()
+    {
+        leaderboardPanel.SetActive(!leaderboardPanel.activeSelf);
     }
 
     public void StartGame()
