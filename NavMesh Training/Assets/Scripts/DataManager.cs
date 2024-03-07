@@ -12,7 +12,7 @@ public class DataManager : MonoBehaviour
     public string highscoreUsername;
     public float highscore;
     public double communityKills; //this is a community number so every kill here counts
-    public List<Score> leaderboard;
+    public List<Score> leaderboard = new List<Score>();
 
     private void Awake()
     {
@@ -23,7 +23,7 @@ public class DataManager : MonoBehaviour
         }
         Instance = this;
         //creating a fake leaderboard...later
-        leaderboard = new List<Score>();
+        //leaderboard = new List<Score>();
         leaderboard.Add(new Score("KAF", 120));
         leaderboard.Add(new Score("JMB", 230));
         leaderboard.Add(new Score("KAF", 4));

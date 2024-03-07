@@ -19,6 +19,8 @@ public class MainMenuController : MonoBehaviour
     public TextMeshProUGUI highscoreText;
     public TextMeshProUGUI communityKillsText;
 
+    public TextMeshProUGUI leaderboardText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,9 +56,16 @@ public class MainMenuController : MonoBehaviour
         howToPlayPanel.SetActive(!howToPlayPanel.activeSelf);
     }
 
-    public void ToggleLeaderboaradPanel()
+    public void ToggleLeaderboardPanel()
     {
         leaderboardPanel.SetActive(!leaderboardPanel.activeSelf);
+
+        if (leaderboardPanel.activeSelf == true)
+        {
+            //create the leaderboard text
+            CreateLeaderboardText();
+        }
+        Debug.Log($"leaderboardPanel: {leaderboardPanel.activeSelf}");
     }
 
     public void StartGame()
@@ -97,6 +106,19 @@ public class MainMenuController : MonoBehaviour
         }
         return "0";
         
+    }
+
+    void CreateLeaderboardText()
+    {
+        List<Score> leaderboard = DataManager.Instance.leaderboard;
+        int position = 1;
+        string boardString = "";
+        foreach(Score score in leaderboard)
+        {
+            boardString += $"{position}. {score.username} {score.score}\n";
+            position++;
+        }
+        leaderboardText.text = boardString;
     }
 
 }
