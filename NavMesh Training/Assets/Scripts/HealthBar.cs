@@ -12,7 +12,6 @@ public class HealthBar : MonoBehaviour
     void Start()
     {
         entityBehaviour = GetComponent<EntityBehaviour>();
-        Debug.Log($"entity health: {entityBehaviour.health}");
         healthSlider.maxValue = entityBehaviour.health;
         healthSlider.value = entityBehaviour.health;
         healthSlider.fillRect.gameObject.SetActive(true);

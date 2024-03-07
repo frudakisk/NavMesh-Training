@@ -12,16 +12,25 @@ using UnityEditor;
 public class MainMenuController : MonoBehaviour
 {
     public GameObject howToPlayPanel;
+    public GameObject leaderboardPanel;
     public TMP_InputField nameField;
     public Button playButton;
 
     public TextMeshProUGUI highscoreText;
     public TextMeshProUGUI communityKillsText;
 
+    public TextMeshProUGUI leaderboardText;
+
     // Start is called before the first frame update
     void Start()
     {
         playButton.interactable = false;
+        List<Score> leaderboard = DataManager.Instance.leaderboard;
+        Debug.Log("Leaderboard");
+        foreach(Score item in leaderboard)
+        {
+            Debug.Log($"{item.username.ToUpper()} : {item.score}");
+        }
     }
 
     // Update is called once per frame
@@ -37,6 +46,17 @@ public class MainMenuController : MonoBehaviour
         }
 
         //assign stat values
+        if (DataManager.Instance.leaderboard.Count > 0)
+        {
+            Score topHighscore = DataManager.Instance.leaderboard[0];
+            highscoreText.text = "Current Highscore\n" + topHighscore.username +
+                " " + topHighscore.score;
+        }
+        else
+        {
+            highscoreText.text = "Current Highscore\nnone";
+        }
+        
         communityKillsText.text = "Total Enemies Killed\n" + FormatCommunityKills();
     }
 
@@ -45,8 +65,20 @@ public class MainMenuController : MonoBehaviour
         howToPlayPanel.SetActive(!howToPlayPanel.activeSelf);
     }
 
+    public void ToggleLeaderboardPanel()
+    {
+        leaderboardPanel.SetActive(!leaderboardPanel.activeSelf);
+
+        if (leaderboardPanel.activeSelf == true)
+        {
+            //create the leaderboard text
+            CreateLeaderboardText();
+        }
+    }
+
     public void StartGame()
     {
+        DataManager.Instance.username = nameField.text;
         SceneManager.LoadScene(1);
     }
 
@@ -83,4 +115,18 @@ public class MainMenuController : MonoBehaviour
         return "0";
         
     }
+
+    void CreateLeaderboardText()
+    {
+        List<Score> leaderboard = DataManager.Instance.leaderboard;
+        int position = 1;
+        string boardString = "";
+        foreach(Score score in leaderboard)
+        {
+            boardString += $"{position}. {score.username} {score.score}\n";
+            position++;
+        }
+        leaderboardText.text = boardString;
+    }
+
 }

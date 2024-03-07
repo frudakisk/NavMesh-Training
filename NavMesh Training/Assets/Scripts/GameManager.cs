@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         spawningInAction = false;
 
         StartCoroutine(Timer());
+
     }
 
     // Update is called once per frame
@@ -87,6 +88,9 @@ public class GameManager : MonoBehaviour
         {
             isGameOverActive = true;
             score = CalculateScore();
+            //check if this score is worth putting in our leaderboard (top 10)
+            Score playerScore = new Score(DataManager.Instance.username, score);
+            CompareScoreToLeaderboard(playerScore);
             AddToCommunityKills();
             StartCoroutine(GameOverRoutine());
             Cursor.lockState = CursorLockMode.None;
@@ -100,14 +104,6 @@ public class GameManager : MonoBehaviour
     /// <returns>float distance from center of square to edge of it</returns>
     public float NavMeshSurfaceRange()
     {
-        if(floor == null)
-        {
-            Debug.Log("Floor reference is missing");
-        }
-        else
-        {
-            Debug.Log("We have floor reference");
-        }
         float distanceToEdge = floor.transform.localScale.x * 0.5f * floor.GetComponent<BoxCollider>().size.x - 1;
         return distanceToEdge;
 
@@ -158,14 +154,6 @@ public class GameManager : MonoBehaviour
     {
         NavMeshHit hit;
         bool hitSuccess = NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas);
-        if(!hitSuccess)
-        {
-            Debug.Log("Spawn location not spawnable");
-        }
-        else
-        {
-            Debug.Log("Spawn position available");
-        }
         return hitSuccess;
     }
 
@@ -198,7 +186,6 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f);
             time++;
-            Debug.Log("Time: " + time);
         }
     }
 
@@ -245,5 +232,35 @@ public class GameManager : MonoBehaviour
     {
         int currentKills = totalEnemiesSpawned - enemyCount;
         DataManager.Instance.communityKills += currentKills;
+    }
+
+    /// <summary>
+    /// Checks to see if the players score is worth putting into
+    /// the leaderboard of top 10 scores
+    /// </summary>
+    /// <param name="playerScore">of type Score that contains
+    /// the players name and the score they got after losing</param>
+    void CompareScoreToLeaderboard(Score playerScore)
+    {
+        List<Score> leaderboard = DataManager.Instance.leaderboard;
+        leaderboard.Add(playerScore);
+
+        if(leaderboard.Count <= 10)
+        {
+            //if there is less than 10 scores in our leaderboard
+            //just add in and sort
+            leaderboard.Sort((x, y) => y.score.CompareTo(x.score));
+        }
+        else
+        {
+            //if there is 10 or more scores in our leaderboard, do this
+            //maybe i can still add and sort but then remove last item?
+            leaderboard.Sort((x, y) => y.score.CompareTo(x.score));
+            leaderboard.RemoveAt(leaderboard.Count - 1);
+        }
+
+        
+        //update the persistent data
+        DataManager.Instance.leaderboard = leaderboard;
     }
 }
