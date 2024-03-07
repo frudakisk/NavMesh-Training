@@ -24,7 +24,7 @@ public class CanvasController : MonoBehaviour
     {
         //no highscore set yet
         scoreText.text = "Score\n" + gameManager.score.ToString("0.00");
-        WaveText.text = "Waves Survived\n" + gameManager.waveNumber;
+        WaveText.text = "Waves Survived\n" + (gameManager.waveNumber - 1);
         accuracyText.text = "Accuracy\n" + gameManager.accuracy.ToString("0.00") + "%";
 
     }

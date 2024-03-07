@@ -76,20 +76,7 @@ public class GameManager : MonoBehaviour
             waveNumber++;
             waveNumberText.text = "Wave: " + waveNumber;
             playerHealthOverTime += player.health;
-            StartCoroutine(SpawnEnemyRoutine());            
-            //if (waveNumber % 5 == 0)
-            //{
-            //    SpawnEnemyWave(bossSpawnNumber, enemys[1]);
-            //    totalEnemiesSpawned += bossSpawnNumber;
-            //    bossSpawnNumber++;
-            //}
-            //else
-            //{
-            //    SpawnEnemyWave(spawnNumber, enemys[0]);
-            //    totalEnemiesSpawned += spawnNumber;
-            //    spawnNumber += 2;
-            //}
-
+            StartCoroutine(SpawnEnemyRoutine());
         }
 
         accuracy = Accuracy(shotsThatHitEnemy, totalShots);
@@ -100,6 +87,7 @@ public class GameManager : MonoBehaviour
         {
             isGameOverActive = true;
             score = CalculateScore();
+            AddToCommunityKills();
             StartCoroutine(GameOverRoutine());
             Cursor.lockState = CursorLockMode.None;
         }
@@ -216,17 +204,13 @@ public class GameManager : MonoBehaviour
 
     float CalculateScore()
     {
-        //the higher the accuracy, the better the score
-        //the higher the waveNumber, the better the score
-        //the higher the time, the worse the score
-        //the higher the enemiesKilled, the better the score
-        //the higher the playerHealthOverTime, the better the score
         int enemiesKilled = totalEnemiesSpawned - enemyCount;
         Debug.Log($"accuracy = {accuracy}\nwaveNumber = {waveNumber}\nenemiesKilled = {enemiesKilled}\nplayerHealthOverTime = {playerHealthOverTime}\ntime = {time}");
-        float temp = (float)((accuracy * (waveNumber * 100)) * enemiesKilled + playerHealthOverTime) - time;
-        Debug.Log("Score = " + temp);
-        if (temp < 0) return 0f;
-        return temp;
+        //Score=(Accuracy×AccuracyWeight)+(WavesSurvived×WavesWeight)+(EnemiesKilled×KillsWeight)+(HealthAfterRound×HealthWeight)+(TimePassed×TimeWeight)
+        float score = ((waveNumber - 1) * 100f * 0.5f) + (accuracy * 0.25f) +  + (enemiesKilled * 0.15f) + (playerHealthOverTime * 0.1f);
+        Debug.Log("Score = " + score);
+        if (score < 0) return 0f;
+        return score;
     }
 
 
@@ -251,5 +235,15 @@ public class GameManager : MonoBehaviour
         }
         largeWaveNumberText.gameObject.SetActive(!largeWaveNumberText.gameObject.activeSelf);
         spawningInAction = false;
+    }
+
+    /// <summary>
+    /// Takes the amount of kills we did during out game and adds it to
+    /// the total kills for the community
+    /// </summary>
+    void AddToCommunityKills()
+    {
+        int currentKills = totalEnemiesSpawned - enemyCount;
+        DataManager.Instance.communityKills += currentKills;
     }
 }

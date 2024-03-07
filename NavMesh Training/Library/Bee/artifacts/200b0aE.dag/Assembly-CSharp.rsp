@@ -370,6 +370,7 @@
 "Assets/Scripts/BossController.cs"
 "Assets/Scripts/BulletBehaviour.cs"
 "Assets/Scripts/CanvasController.cs"
+"Assets/Scripts/DataManager.cs"
 "Assets/Scripts/EnemyController.cs"
 "Assets/Scripts/EntityBehaviour.cs"
 "Assets/Scripts/GameManager.cs"
