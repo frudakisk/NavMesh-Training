@@ -37,6 +37,8 @@ public class MainMenuController : MonoBehaviour
         }
 
         //assign stat values
+        highscoreText.text = "Current Highscore\n" + DataManager.Instance.highscoreUsername +
+            " " + DataManager.Instance.highscore;
         communityKillsText.text = "Total Enemies Killed\n" + FormatCommunityKills();
     }
 
@@ -47,6 +49,7 @@ public class MainMenuController : MonoBehaviour
 
     public void StartGame()
     {
+        DataManager.Instance.username = nameField.text;
         SceneManager.LoadScene(1);
     }
 
@@ -83,4 +86,5 @@ public class MainMenuController : MonoBehaviour
         return "0";
         
     }
+
 }

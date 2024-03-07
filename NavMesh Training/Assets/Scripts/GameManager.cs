@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
         {
             isGameOverActive = true;
             score = CalculateScore();
+            CompareScoreToHighscore();
             AddToCommunityKills();
             StartCoroutine(GameOverRoutine());
             Cursor.lockState = CursorLockMode.None;
@@ -245,5 +246,14 @@ public class GameManager : MonoBehaviour
     {
         int currentKills = totalEnemiesSpawned - enemyCount;
         DataManager.Instance.communityKills += currentKills;
+    }
+
+    void CompareScoreToHighscore()
+    {
+        if(score > DataManager.Instance.highscore)
+        {
+            DataManager.Instance.highscore = score;
+            DataManager.Instance.highscoreUsername = DataManager.Instance.username;
+        }
     }
 }

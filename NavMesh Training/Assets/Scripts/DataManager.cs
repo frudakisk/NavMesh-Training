@@ -9,6 +9,7 @@ public class DataManager : MonoBehaviour
 
     //do like a leaderboard thing where its the name and highscore. 
     public string username;
+    public string highscoreUsername;
     public float highscore;
     public double communityKills; //this is a community number so every kill here counts
 
@@ -21,6 +22,5 @@ public class DataManager : MonoBehaviour
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        //communityKills = 12312312; //testing
     }
 }
