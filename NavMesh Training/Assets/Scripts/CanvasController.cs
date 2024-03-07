@@ -22,7 +22,17 @@ public class CanvasController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //no highscore set yet
+        if(DataManager.Instance.leaderboard.Count > 0)
+        {
+            Score topHighscore = DataManager.Instance.leaderboard[0];
+            highscoreText.text = "Highscore\n" + topHighscore.username + " " + topHighscore.score;
+        }
+        else
+        {
+            highscoreText.text = "Highscore\nnone";
+        }
+        
+        
         scoreText.text = "Score\n" + gameManager.score.ToString("0.00");
         WaveText.text = "Waves Survived\n" + (gameManager.waveNumber - 1);
         accuracyText.text = "Accuracy\n" + gameManager.accuracy.ToString("0.00") + "%";

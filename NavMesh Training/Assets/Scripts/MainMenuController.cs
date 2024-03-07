@@ -46,8 +46,17 @@ public class MainMenuController : MonoBehaviour
         }
 
         //assign stat values
-        highscoreText.text = "Current Highscore\n" + DataManager.Instance.highscoreUsername +
-            " " + DataManager.Instance.highscore;
+        if (DataManager.Instance.leaderboard.Count > 0)
+        {
+            Score topHighscore = DataManager.Instance.leaderboard[0];
+            highscoreText.text = "Current Highscore\n" + topHighscore.username +
+                " " + topHighscore.score;
+        }
+        else
+        {
+            highscoreText.text = "Current Highscore\nnone";
+        }
+        
         communityKillsText.text = "Total Enemies Killed\n" + FormatCommunityKills();
     }
 
@@ -65,7 +74,6 @@ public class MainMenuController : MonoBehaviour
             //create the leaderboard text
             CreateLeaderboardText();
         }
-        Debug.Log($"leaderboardPanel: {leaderboardPanel.activeSelf}");
     }
 
     public void StartGame()

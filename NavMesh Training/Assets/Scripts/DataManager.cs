@@ -9,8 +9,8 @@ public class DataManager : MonoBehaviour
 
     //do like a leaderboard thing where its the name and highscore. 
     public string username;
-    public string highscoreUsername;
-    public float highscore;
+    public string highscoreUsername; //dont really need anymore
+    public float highscore; //dont really need anymore
     public double communityKills; //this is a community number so every kill here counts
     public List<Score> leaderboard = new List<Score>();
 
@@ -22,17 +22,6 @@ public class DataManager : MonoBehaviour
             return;
         }
         Instance = this;
-        //creating a fake leaderboard...later
-        //leaderboard = new List<Score>();
-        leaderboard.Add(new Score("KAF", 120));
-        leaderboard.Add(new Score("JMB", 230));
-        leaderboard.Add(new Score("KAF", 4));
-        leaderboard.Add(new Score("GNF", 53));
-        leaderboard.Add(new Score("GNF", 95));
-        leaderboard.Add(new Score("KAF", 111));
-        leaderboard.Add(new Score("JMB", 507));
-        leaderboard.Add(new Score("KAF", 123));
-        leaderboard.Add(new Score("XXX", 72));
         DontDestroyOnLoad(gameObject);
     }
 

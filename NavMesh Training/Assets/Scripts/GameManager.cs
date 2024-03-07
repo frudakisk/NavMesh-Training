@@ -90,7 +90,6 @@ public class GameManager : MonoBehaviour
             score = CalculateScore();
             //check if this score is worth putting in our leaderboard (top 10)
             Score playerScore = new Score(DataManager.Instance.username, score);
-            //CompareScoreToHighscore();
             CompareScoreToLeaderboard(playerScore);
             AddToCommunityKills();
             StartCoroutine(GameOverRoutine());
@@ -155,14 +154,6 @@ public class GameManager : MonoBehaviour
     {
         NavMeshHit hit;
         bool hitSuccess = NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas);
-        if(!hitSuccess)
-        {
-            Debug.Log("Spawn location not spawnable");
-        }
-        else
-        {
-            Debug.Log("Spawn position available");
-        }
         return hitSuccess;
     }
 
@@ -243,19 +234,12 @@ public class GameManager : MonoBehaviour
         DataManager.Instance.communityKills += currentKills;
     }
 
-    void CompareScoreToHighscore()
-    {
-        if(score > DataManager.Instance.highscore)
-        {
-            DataManager.Instance.highscore = score;
-            DataManager.Instance.highscoreUsername = DataManager.Instance.username;
-        }
-    }
-
     /// <summary>
-    /// needs some work. wont add to end of list
+    /// Checks to see if the players score is worth putting into
+    /// the leaderboard of top 10 scores
     /// </summary>
-    /// <param name="playerScore"></param>
+    /// <param name="playerScore">of type Score that contains
+    /// the players name and the score they got after losing</param>
     void CompareScoreToLeaderboard(Score playerScore)
     {
         List<Score> leaderboard = DataManager.Instance.leaderboard;
