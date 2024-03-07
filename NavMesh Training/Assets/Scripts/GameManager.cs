@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         spawningInAction = false;
 
         StartCoroutine(Timer());
+
     }
 
     // Update is called once per frame
@@ -104,14 +105,6 @@ public class GameManager : MonoBehaviour
     /// <returns>float distance from center of square to edge of it</returns>
     public float NavMeshSurfaceRange()
     {
-        if(floor == null)
-        {
-            Debug.Log("Floor reference is missing");
-        }
-        else
-        {
-            Debug.Log("We have floor reference");
-        }
         float distanceToEdge = floor.transform.localScale.x * 0.5f * floor.GetComponent<BoxCollider>().size.x - 1;
         return distanceToEdge;
 
@@ -266,30 +259,23 @@ public class GameManager : MonoBehaviour
     void CompareScoreToLeaderboard(Score playerScore)
     {
         List<Score> leaderboard = DataManager.Instance.leaderboard;
+        leaderboard.Add(playerScore);
 
-        if(leaderboard.Count == 0)
+        if(leaderboard.Count <= 10)
         {
-            leaderboard.Add(playerScore);
-            return;
+            //if there is less than 10 scores in our leaderboard
+            //just add in and sort
+            leaderboard.Sort((x, y) => y.score.CompareTo(x.score));
+        }
+        else
+        {
+            //if there is 10 or more scores in our leaderboard, do this
+            //maybe i can still add and sort but then remove last item?
+            leaderboard.Sort((x, y) => y.score.CompareTo(x.score));
+            leaderboard.RemoveAt(leaderboard.Count - 1);
         }
 
-        //if there is less than 10 scores in our leaderboard
-        //just add in and sort?
-
-        for(int i = leaderboard.Count - 1; i >= 0; i--)
-        {
-            if(playerScore.score > leaderboard[i].score)
-            {
-                leaderboard.Insert(i, playerScore);
-                //remove last index if count is larger than 10
-                if(leaderboard.Count > 10)
-                {
-                    leaderboard.RemoveAt(leaderboard.Count - 1);
-                } 
-                break;
-            }
-            
-        }
+        
         //update the persistent data
         DataManager.Instance.leaderboard = leaderboard;
     }

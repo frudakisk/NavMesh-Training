@@ -27,7 +27,7 @@ public class MainMenuController : MonoBehaviour
         Debug.Log("Leaderboard");
         foreach(Score item in leaderboard)
         {
-            Debug.Log($"{item.username} : {item.score}");
+            Debug.Log($"{item.username.ToUpper()} : {item.score}");
         }
     }
 
