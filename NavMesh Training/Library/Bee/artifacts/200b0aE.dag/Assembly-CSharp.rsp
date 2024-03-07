@@ -379,6 +379,7 @@
 "Assets/Scripts/ParticleController.cs"
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/PlayerManager.cs"
+"Assets/Scripts/Score.cs"
 -langversion:9.0
 
 /deterministic

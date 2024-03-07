@@ -12,15 +12,19 @@ public class DataManager : MonoBehaviour
     public string highscoreUsername;
     public float highscore;
     public double communityKills; //this is a community number so every kill here counts
+    public List<Score> leaderboard;
 
     private void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
+        leaderboard = new List<Score>();
         DontDestroyOnLoad(gameObject);
     }
+
+
 }

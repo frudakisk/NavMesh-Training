@@ -87,7 +87,10 @@ public class GameManager : MonoBehaviour
         {
             isGameOverActive = true;
             score = CalculateScore();
-            CompareScoreToHighscore();
+            //check if this score is worth putting in our leaderboard (top 10)
+            Score playerScore = new Score(DataManager.Instance.username, score);
+            //CompareScoreToHighscore();
+            CompareScoreToLeaderboard(playerScore);
             AddToCommunityKills();
             StartCoroutine(GameOverRoutine());
             Cursor.lockState = CursorLockMode.None;
@@ -199,7 +202,6 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1.0f);
             time++;
-            Debug.Log("Time: " + time);
         }
     }
 
@@ -255,5 +257,40 @@ public class GameManager : MonoBehaviour
             DataManager.Instance.highscore = score;
             DataManager.Instance.highscoreUsername = DataManager.Instance.username;
         }
+    }
+
+    /// <summary>
+    /// needs some work. wont add to end of list
+    /// </summary>
+    /// <param name="playerScore"></param>
+    void CompareScoreToLeaderboard(Score playerScore)
+    {
+        List<Score> leaderboard = DataManager.Instance.leaderboard;
+
+        if(leaderboard.Count == 0)
+        {
+            leaderboard.Add(playerScore);
+            return;
+        }
+
+        //if there is less than 10 scores in our leaderboard
+        //just add in and sort?
+
+        for(int i = leaderboard.Count - 1; i >= 0; i--)
+        {
+            if(playerScore.score > leaderboard[i].score)
+            {
+                leaderboard.Insert(i, playerScore);
+                //remove last index if count is larger than 10
+                if(leaderboard.Count > 10)
+                {
+                    leaderboard.RemoveAt(leaderboard.Count - 1);
+                } 
+                break;
+            }
+            
+        }
+        //update the persistent data
+        DataManager.Instance.leaderboard = leaderboard;
     }
 }

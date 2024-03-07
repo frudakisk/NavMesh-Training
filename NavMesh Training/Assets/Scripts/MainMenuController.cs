@@ -23,6 +23,12 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         playButton.interactable = false;
+        List<Score> leaderboard = DataManager.Instance.leaderboard;
+        Debug.Log("Leaderboard");
+        foreach(Score item in leaderboard)
+        {
+            Debug.Log($"{item.username} : {item.score}");
+        }
     }
 
     // Update is called once per frame
