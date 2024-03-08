@@ -30,14 +30,7 @@ public class MainMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(nameField.text.Length == 3)
-        {
-            playButton.interactable = true;
-        }
-        else
-        {
-            playButton.interactable = false;
-        }
+        PlayButtonInteraction();
 
         //assign stat values
         if (DataManager.Instance.leaderboard.Count > 0)
@@ -54,11 +47,34 @@ public class MainMenuController : MonoBehaviour
         communityKillsText.text = "Total Enemies Killed\n" + FormatCommunityKills();
     }
 
+    /// <summary>
+    /// Sets the play button active if the input field text has 3 characters
+    /// and sets it to false if it doesnt
+    /// </summary>
+    private void PlayButtonInteraction()
+    {
+        if (nameField.text.Length == 3)
+        {
+            playButton.interactable = true;
+        }
+        else
+        {
+            playButton.interactable = false;
+        }
+    }
+
+    /// <summary>
+    /// toggles the active setting of the how to playe panel
+    /// </summary>
     public void ToggleHowToPlayPanel()
     {
         howToPlayPanel.SetActive(!howToPlayPanel.activeSelf);
     }
 
+    /// <summary>
+    /// toggles the active setting of the leaderboard panel and creates
+    /// the leaderboard if the panel is set to active
+    /// </summary>
     public void ToggleLeaderboardPanel()
     {
         leaderboardPanel.SetActive(!leaderboardPanel.activeSelf);
@@ -70,12 +86,19 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// starts the game by moving to the next scene and saving the players
+    /// username
+    /// </summary>
     public void StartGame()
     {
         DataManager.Instance.username = nameField.text;
         SceneManager.LoadScene(1);
     }
 
+    /// <summary>
+    /// Quits the application based on the platform it is running on
+    /// </summary>
     public void QuitGame()
     {
         DataManager.Instance.SaveData();
@@ -111,6 +134,10 @@ public class MainMenuController : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Creates the text that goes into the leaderboard panel by reading from
+    /// the saved leaderboard
+    /// </summary>
     void CreateLeaderboardText()
     {
         List<Score> leaderboard = DataManager.Instance.leaderboard;
