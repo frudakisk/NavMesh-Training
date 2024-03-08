@@ -19,14 +19,18 @@ public class BulletBehaviour : MonoBehaviour
 
         if (entityThatShot == null)
         {
-            //I wish i could make bullet dissapear a little after
-            //the entity dies but it brings up an error
             //MAYBE ADD EFFECT TO EXPLODE BULLET WHEN THIS HAPPENS
             Debug.Log("Entity that shot was destroyed");
             Destroy(gameObject);
         }
     }
 
+    /// <summary>
+    /// Checks for the different kinds of collisions that a bullet can make
+    /// and takes into account who shot the bullet as well. This helps
+    /// create the accuracy percentage
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision)
     {
         if(entityThatShot != null)
@@ -54,10 +58,7 @@ public class BulletBehaviour : MonoBehaviour
 
             }
         }
-
-
         Destroy(gameObject);
-
     }
 
 
@@ -72,6 +73,7 @@ public class BulletBehaviour : MonoBehaviour
             Destroy(gameObject);
             if(entityThatShot.CompareTag("Player"))
             {
+                //if a bullet from the player falls off the map, add to accuracy calculations
                 gameManager.totalShots++;
             }
         }

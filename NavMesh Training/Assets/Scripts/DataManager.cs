@@ -6,9 +6,6 @@ using System.IO;
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
-
-
-    //do like a leaderboard thing where its the name and highscore. 
     public string username;
     public double communityKills; //this is a community number so every kill here counts
     public List<Score> leaderboard;
@@ -30,7 +27,9 @@ public class DataManager : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Saves some data that we want to be persistent through sessions
+    /// </summary>
     public void SaveData()
     {
         GameData data = new GameData();
@@ -40,6 +39,10 @@ public class DataManager : MonoBehaviour
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
     }
 
+    /// <summary>
+    /// Loads in some data that we saved from previous sessions.
+    /// Checks if filepath exists
+    /// </summary>
     public void LoadData()
     {
         string path = Application.persistentDataPath + "/savefile.json";
@@ -52,6 +55,10 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// For cleaning purposes. Removes the file that contains the saved
+    /// data incase we want a fresh paper.
+    /// </summary>
     public void RemoveData()
     {
         string path = Application.persistentDataPath + "/savefile.json";
@@ -65,6 +72,10 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// A serializable class to make conversion to json easier.
+    /// makes sure Score is also serializable
+    /// </summary>
     [System.Serializable]
     public class GameData
     {

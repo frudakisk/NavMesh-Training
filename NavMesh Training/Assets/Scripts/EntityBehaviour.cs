@@ -30,19 +30,16 @@ public class EntityBehaviour : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     /// <summary>
     /// Shoots a bullet prefab in the forward direction that the player is facing.
     /// </summary>
-    /// <param name="entity">the game object that shot the bullet</param>
+    /// <param name="entity">the gameobject that shot the bullet</param>
+    /// <param name="shootForwardPosition"> how far ahead we want the bullet to be forward of the
+    /// entity</param>
+    /// <param name="shootUpwardPosition">the y position of the bullet when it is spawned in</param>
     public void ShootBullet(GameObject entity, float shootForwardPosition, Vector3 shootUpwardPosition)
     {
-        //spawn the bullet just a little below the camera
+        //spawn the bullet in a position near the body
         Vector3 spawnPos = (entity.transform.position + shootUpwardPosition) + entity.transform.forward * shootForwardPosition;
         //make sure the bullet has same rotation as player
         GameObject currentBullet = Instantiate(bullet, spawnPos, entity.transform.rotation);
@@ -63,10 +60,6 @@ public class EntityBehaviour : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Bullet"))
         {
-            if(gameObject.CompareTag("Player"))
-            {
-
-            }
             health--;
             UpdateHealthBar(health);
         }
