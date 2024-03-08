@@ -9,6 +9,7 @@ public class EnemyController : EntityBehaviour
     private Vector3 destination;
     protected float lookRadius;
     protected bool isDestinationSet;
+    protected float rotationSpeed;
 
     //References
     protected NavMeshAgent agent;
@@ -32,6 +33,7 @@ public class EnemyController : EntityBehaviour
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
         audioSource = GetComponent<AudioSource>(); //only enemies make noises
+        rotationSpeed = 5.0f;
         lookRadius = 20.0f;
         isDestinationSet = false;
         shootTime = 1.0f;
@@ -72,10 +74,11 @@ public class EnemyController : EntityBehaviour
     {
         //get direction of target
         Vector3 direction = (player.position - transform.position).normalized;
+        direction.y = 0f;
         //get rotation that points to the target
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
         //set the rotation of our enemy
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
     /// <summary>

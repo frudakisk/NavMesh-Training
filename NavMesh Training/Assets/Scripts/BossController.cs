@@ -20,10 +20,11 @@ public class BossController : EnemyController
     /// </summary>
     protected override void Attack()
     {
+        Vector3 upwardPos = new Vector3(0f, 2f, 0f);
         sTime = sTime - Time.deltaTime;
         if(sTime < 0)
         {
-            ShootBullet(gameObject, 3f, new Vector3(0, 2, 0));
+            ShootBullet(gameObject, 3f, upwardPos);
             sTime = shootTime;
         }
     }
