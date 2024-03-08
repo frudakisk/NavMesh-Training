@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BossController : EnemyController
 {
-
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -15,36 +14,17 @@ public class BossController : EnemyController
         health = 20;
     }
 
-    private void Update()
-    {
-        Debug.Log($"sTime in boss is {sTime}");
-        if (IsEntityDead())
-        {
-            StartCoroutine(DeathRoutine());
-        }
-
-        //always know distance between player and enemy
-        float distance = GetDistance();
-        if (distance <= lookRadius)
-        {
-            Chase(distance);
-        }
-        else if (distance > lookRadius && isDestinationSet == false)
-        {
-            agent.stoppingDistance = 0.1f;
-            WalkAround();
-        }
-
-        CheckAtWalkDestination();
-    }
-
+    /// <summary>
+    /// Using a different version of the Attack() method for Bosses because
+    /// I want a Boss to shoot faster
+    /// </summary>
     protected override void Attack()
     {
+        Vector3 upwardPos = new Vector3(0f, 2f, 0f);
         sTime = sTime - Time.deltaTime;
         if(sTime < 0)
         {
-            Debug.Log("Boss Shot a Bullet");
-            ShootBullet(gameObject, 2.5f, new Vector3(0, 2, 0));
+            ShootBullet(gameObject, 3f, upwardPos);
             sTime = shootTime;
         }
     }

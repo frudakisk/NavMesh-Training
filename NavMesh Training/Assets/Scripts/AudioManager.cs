@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-
-    private AudioSource audioSource;
     public List<AudioClip> clips = new List<AudioClip>();
 
+    private AudioSource audioSource;
     private AudioClip lastPlayedClip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +25,10 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Randomly selects a clip from clips list that was not the last clip
+    /// played.
+    /// </summary>
     private void PlayRandomClip()
     {
         if(clips.Count == 0)

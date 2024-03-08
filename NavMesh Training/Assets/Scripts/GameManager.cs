@@ -6,26 +6,28 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-
+    [Tooltip("Bullet Items")]
     public GameObject bullet;
     public float bulletForwardForce = 15.0f;
     public float bulletUpwardForce = 3.0f;
 
+    [Tooltip("Enemy Items")]
     public GameObject[] enemys; //0 is normal, 1 is boss so far
     public int enemyCount;
     public int bossSpawnNumber;
     private int spawnNumber;
  
-
+    [Tooltip("Accuracy Items")]
     public int shotsThatHitEnemy;
     public int totalShots;
     public float accuracy; //use get and set stuff
 
+    [Tooltip("Game Over Items")]
     public static bool isGameOver;
     private bool isGameOverActive;
     public GameObject gameOverPanel;
 
-
+    [Tooltip("Text Items")]
     public TextMeshProUGUI waveNumberText;
     public TextMeshProUGUI enemiesRemainingText;
     public TextMeshProUGUI accuracyText;
@@ -40,8 +42,8 @@ public class GameManager : MonoBehaviour
     private int totalEnemiesSpawned;
     private PlayerController player;
     private int playerHealthOverTime;
-
     private bool spawningInAction;
+
     private void Awake()
     {
         floor = GameObject.Find("Mesh Floor");
@@ -80,20 +82,13 @@ public class GameManager : MonoBehaviour
             StartCoroutine(SpawnEnemyRoutine());
         }
 
+        //always be updating the accuracy
         accuracy = Accuracy(shotsThatHitEnemy, totalShots);
-        //update some sort of UI element
         accuracyText.text = "Accuracy: " + accuracy.ToString("0.00") + "%";
 
         if(isGameOver && !isGameOverActive)
         {
-            isGameOverActive = true;
-            score = CalculateScore();
-            //check if this score is worth putting in our leaderboard (top 10)
-            Score playerScore = new Score(DataManager.Instance.username, score);
-            CompareScoreToLeaderboard(playerScore);
-            AddToCommunityKills();
-            StartCoroutine(GameOverRoutine());
-            Cursor.lockState = CursorLockMode.None;
+            GameOverSequence();
         }
     }
 
@@ -152,8 +147,7 @@ public class GameManager : MonoBehaviour
     /// <returns>true if position is safe, false otherwise</returns>
     private bool IsPositionSpawnable(Vector3 position)
     {
-        NavMeshHit hit;
-        bool hitSuccess = NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas);
+        bool hitSuccess = NavMesh.SamplePosition(position, out _, 1f, NavMesh.AllAreas);
         return hitSuccess;
     }
 
@@ -174,12 +168,20 @@ public class GameManager : MonoBehaviour
         return accuracy;
     }
 
+    /// <summary>
+    /// Shows the game over panel after a couple seconds delay
+    /// </summary>
+    /// <returns>a coroutine</returns>
     IEnumerator GameOverRoutine()
     {
         yield return new WaitForSeconds(3.0f);
         gameOverPanel.SetActive(true);
     }
 
+    /// <summary>
+    /// A timer to keep track of how long a game has been active
+    /// </summary>
+    /// <returns>a coroutine</returns>
     IEnumerator Timer()
     {
         while(!isGameOver)
@@ -189,18 +191,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calculates the score of the player when the game is over
+    /// and uses the accuracy, wave number, enemies killed, and health over time
+    /// as variables to create the score
+    /// </summary>
+    /// <returns>a score float value</returns>
     float CalculateScore()
     {
         int enemiesKilled = totalEnemiesSpawned - enemyCount;
-        Debug.Log($"accuracy = {accuracy}\nwaveNumber = {waveNumber}\nenemiesKilled = {enemiesKilled}\nplayerHealthOverTime = {playerHealthOverTime}\ntime = {time}");
         //Score=(Accuracy×AccuracyWeight)+(WavesSurvived×WavesWeight)+(EnemiesKilled×KillsWeight)+(HealthAfterRound×HealthWeight)+(TimePassed×TimeWeight)
         float score = ((waveNumber - 1) * 100f * 0.5f) + (accuracy * 0.25f) +  + (enemiesKilled * 0.15f) + (playerHealthOverTime * 0.1f);
-        Debug.Log("Score = " + score);
         if (score < 0) return 0f;
         return score;
     }
 
-
+    /// <summary>
+    /// The routine that happens when we are spawning a new wave of enemies.
+    /// We display the wave number in the middle of the screen and give the
+    /// player some time to get ready for the next wave
+    /// </summary>
+    /// <returns>a coroutine</returns>
     private IEnumerator SpawnEnemyRoutine()
     {
         spawningInAction = true;
@@ -258,9 +269,24 @@ public class GameManager : MonoBehaviour
             leaderboard.Sort((x, y) => y.score.CompareTo(x.score));
             leaderboard.RemoveAt(leaderboard.Count - 1);
         }
-
-        
         //update the persistent data
         DataManager.Instance.leaderboard = leaderboard;
+    }
+
+    /// <summary>
+    /// A list of items that need to happen when the game is over such as
+    /// calculating the score, seeing if that score needs to be put on the leaderboard,
+    /// collecting community kills, and showing the game over screen.
+    /// </summary>
+    void GameOverSequence()
+    {
+        isGameOverActive = true;
+        score = CalculateScore();
+        //check if this score is worth putting in our leaderboard (top 10)
+        Score playerScore = new Score(DataManager.Instance.username, score);
+        CompareScoreToLeaderboard(playerScore);
+        AddToCommunityKills();
+        StartCoroutine(GameOverRoutine());
+        Cursor.lockState = CursorLockMode.None;
     }
 }

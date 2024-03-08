@@ -9,21 +9,20 @@ public class PlayerController : EntityBehaviour
     private float verticalInput;
     private float mouseX;
 
-    public float speed = 5.0f;
-    public float mouseSpeed = 30.0f;
+    private float speed = 5.0f;
+    private float mouseSpeed = 75.0f;
 
     private bool wasForceApplied = false;
 
     public AudioClip hitNoise;
-
     public GameObject damagePanel;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         health = 10;
         Cursor.lockState = CursorLockMode.Locked;
-        audioSource = GetComponent<AudioSource>(); //probably can refactor
     }
 
     // Update is called once per frame
@@ -31,13 +30,7 @@ public class PlayerController : EntityBehaviour
     {
         if(IsEntityDead())
         {
-            if(wasForceApplied == false)
-            {
-                rb.freezeRotation = false;
-                rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
-                wasForceApplied = true;
-                GameManager.isGameOver = true;
-            }
+            PlayerDead();
         }
 
         horizontalInput = Input.GetAxis("Horizontal");
@@ -86,6 +79,12 @@ public class PlayerController : EntityBehaviour
         }
     }
 
+    /// <summary>
+    /// overriding the collision from EntityBehaviour because we need to add
+    /// more than just reducing health. We play a visual damage so the player
+    /// knows they got hit via visual aspects
+    /// </summary>
+    /// <param name="collision">the object that collided with this object</param>
     protected override void OnCollisionEnter(Collision collision)
     {
         base.OnCollisionEnter(collision);
@@ -96,6 +95,10 @@ public class PlayerController : EntityBehaviour
         }
     }
 
+    /// <summary>
+    /// Plays a quick red screen that flashes over the entire screen
+    /// </summary>
+    /// <returns>a coroutine</returns>
     private IEnumerator DamagePanelRoutine()
     {
         for(int i = 0; i < 5; i++)
@@ -105,7 +108,21 @@ public class PlayerController : EntityBehaviour
             damagePanel.SetActive(!damagePanel.activeSelf);
             yield return new WaitForSeconds(0.01f);
         }
-        
+    }
 
+    /// <summary>
+    /// The process that happens when the players health is 0. We apply a force
+    /// to the player and let the body have a ragdoll effect and then let the
+    /// game manager know the game is over
+    /// </summary>
+    private void PlayerDead()
+    {
+        if (wasForceApplied == false)
+        {
+            rb.freezeRotation = false;
+            rb.AddForce(Vector3.up * 10f, ForceMode.Impulse);
+            wasForceApplied = true;
+            GameManager.isGameOver = true;
+        }
     }
 }

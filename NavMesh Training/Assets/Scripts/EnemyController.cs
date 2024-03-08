@@ -7,19 +7,23 @@ public class EnemyController : EntityBehaviour
 {
     //NavMesh variables
     private Vector3 destination;
-    protected float lookRadius = 20.0f;
-    protected bool isDestinationSet = false;
+    protected float lookRadius;
+    protected bool isDestinationSet;
+    protected float rotationSpeed;
 
     //References
     protected NavMeshAgent agent;
     private Transform player;
 
-    public float shootTime = 1.0f;
+    //bullet information
+    public float shootTime;
     protected float sTime;
 
+    //animations
     private bool deathAnimationActive;
     public ParticleSystem deathParticles;
 
+    //audio
     public List<AudioClip> deathGrunts = new List<AudioClip>();
 
     // Start is called before the first frame update
@@ -28,7 +32,11 @@ public class EnemyController : EntityBehaviour
         base.Start();
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-        audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>(); //only enemies make noises
+        rotationSpeed = 5.0f;
+        lookRadius = 20.0f;
+        isDestinationSet = false;
+        shootTime = 1.0f;
         health = 3;
         sTime = shootTime;
         deathAnimationActive = false;
@@ -49,14 +57,10 @@ public class EnemyController : EntityBehaviour
         {
             Chase(distance);
         }
-        else if (distance > lookRadius && isDestinationSet == false)
+        else if (distance > lookRadius && isDestinationSet == false && agent.enabled == true)
         {
-            if(agent.enabled == true)
-            {
-                agent.stoppingDistance = 0.1f;
-                WalkAround();
-            }
-            
+            agent.stoppingDistance = 0.1f;
+            WalkAround();  
         }
 
         CheckAtWalkDestination();
@@ -70,10 +74,11 @@ public class EnemyController : EntityBehaviour
     {
         //get direction of target
         Vector3 direction = (player.position - transform.position).normalized;
+        direction.y = 0f;
         //get rotation that points to the target
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        Quaternion lookRotation = Quaternion.LookRotation(direction);
         //set the rotation of our enemy
-        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
     }
 
     /// <summary>
@@ -102,8 +107,6 @@ public class EnemyController : EntityBehaviour
                 float randomZ = Random.Range(-floorRange, floorRange);
                 destination = new Vector3(randomX, 0, randomZ);
             } while (!IsPositionWalkable(destination));
-            //could also just set a higher obstacle avoidance radius in the agent
-            //but where's the fun in that!
             agent.SetDestination(destination);
             isDestinationSet = true;
         }
@@ -117,8 +120,7 @@ public class EnemyController : EntityBehaviour
     /// <returns>True if position is a walkable spot, false otherwise</returns>
     protected bool IsPositionWalkable(Vector3 position)
     {
-        NavMeshHit hit;
-        bool hitSuccess = NavMesh.SamplePosition(position, out hit, 0.1f, NavMesh.AllAreas);
+        bool hitSuccess = NavMesh.SamplePosition(position, out _, 0.1f, NavMesh.AllAreas);
         return hitSuccess;
     }
 
@@ -147,7 +149,6 @@ public class EnemyController : EntityBehaviour
     /// <param name="distance">distance between the player and the enemy</param>
     protected void Chase(float distance)
     {
-        
         if(agent.isActiveAndEnabled)
         {
             agent.stoppingDistance = 10.0f;
@@ -155,7 +156,6 @@ public class EnemyController : EntityBehaviour
             isDestinationSet = false;
             if (distance <= agent.stoppingDistance)
             {
-                //attack
                 if (!GameManager.isGameOver) Attack();
                 FaceTarget();
             }
@@ -163,6 +163,9 @@ public class EnemyController : EntityBehaviour
 
     }
 
+    /// <summary>
+    /// Shoot a bullet at a timed interval determined by the class
+    /// </summary>
     protected virtual void Attack()
     {
         sTime = sTime - Time.deltaTime;
@@ -173,6 +176,13 @@ public class EnemyController : EntityBehaviour
         }
     }
 
+    /// <summary>
+    /// This is what happens when an enemy dies. We turn off its agent so that
+    /// we can apply physics to it and give it a little push to the ground
+    /// before we wait a couple of seconds and make an explosion animation happen.
+    /// Then we destroy the object
+    /// </summary>
+    /// <returns>a coroutine</returns>
     protected IEnumerator DeathRoutine()
     {
         deathAnimationActive = true;
