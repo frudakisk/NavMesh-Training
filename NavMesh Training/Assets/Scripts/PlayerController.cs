@@ -10,7 +10,7 @@ public class PlayerController : EntityBehaviour
     private float mouseX;
 
     private float speed = 5.0f;
-    private float mouseSpeed = 30.0f;
+    private float mouseSpeed = 75.0f;
 
     private bool wasForceApplied = false;
 
