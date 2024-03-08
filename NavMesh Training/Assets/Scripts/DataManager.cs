@@ -52,6 +52,19 @@ public class DataManager : MonoBehaviour
         }
     }
 
+    public void RemoveData()
+    {
+        string path = Application.persistentDataPath + "/savefile.json";
+        if(File.Exists(path))
+        {
+            File.Delete(path);
+        }
+        else
+        {
+            Debug.Log("There is no file to delete");
+        }
+    }
+
     [System.Serializable]
     public class GameData
     {
