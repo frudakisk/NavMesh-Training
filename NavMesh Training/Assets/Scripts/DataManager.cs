@@ -11,7 +11,7 @@ public class DataManager : MonoBehaviour
     //do like a leaderboard thing where its the name and highscore. 
     public string username;
     public double communityKills; //this is a community number so every kill here counts
-    public List<Score> leaderboard = new List<Score>();
+    public List<Score> leaderboard;
 
     private void Awake()
     {
@@ -23,6 +23,11 @@ public class DataManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         LoadData();
+
+        if(leaderboard == null)
+        {
+            leaderboard = new List<Score>();
+        }
     }
 
 
