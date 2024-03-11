@@ -15,7 +15,7 @@ public class EntityBehaviour : MonoBehaviour
     protected GameManager gameManager;
     protected float floorRange;
 
-    private HealthBar healthBar;
+    protected HealthBar healthBar;
 
     protected AudioSource audioSource;
 

@@ -418,9 +418,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2093856049092276467}
     m_Modifications:
+    - target: {fileID: 2170164754842467956, guid: e91567234d4804cd691fd92bf7ec2323, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3993711693037565233, guid: e91567234d4804cd691fd92bf7ec2323, type: 3}
       propertyPath: m_Name
       value: HealthSlider
+      objectReference: {fileID: 0}
+    - target: {fileID: 3993711693037565233, guid: e91567234d4804cd691fd92bf7ec2323, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4042682694586737208, guid: e91567234d4804cd691fd92bf7ec2323, type: 3}
       propertyPath: m_Value
